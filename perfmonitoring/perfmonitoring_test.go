@@ -1,18 +1,20 @@
 package perfmonitoring
 
 import (
-    "testing"
+	"testing"
 )
 
 func TestPerfMonGetSet(t *testing.T) {
-    perfMon, err := NewPerfMonitoring("testapp", "testseries")
-    if err != nil {
-        t.Fatal(err)
-    }
+	perfMon, err := NewPerfMonitoring("go_commons_unit_tests", "go_commons_unit_tests_series")
+	if err != nil {
+		t.Fatal(err)
+	}
 
-    perfMon.Set("testname", 5)
+	perfMon.Set("testcolumn1", []interface{}{5})
 
-    if perfMon.Get("testname").(int) != 5 {
-        t.FailNow()
-    }
+	if perfMon.Get("testcolumn1")[0].(int) != 5 {
+		t.FailNow()
+	}
+	
+	perfMon.Push()
 }
