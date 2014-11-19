@@ -3,7 +3,6 @@ package perfmonitoring
 import (
 	"fmt"
 	"strings"
-
 	"github.com/influxdb/influxdb/client"
 )
 
