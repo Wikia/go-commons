@@ -50,25 +50,21 @@ func InitLogger(appName string, logLevel int) error {
 	if err != nil {
 		return err
 	}
-	logger.errorLogger.SetPrefix(appName + " ERROR: ")
 
 	logger.warnLogger, err = syslog.NewLogger(syslog.LOG_WARNING|syslog.LOG_USER, 0)
 	if err != nil {
 		return err
 	}
-	logger.warnLogger.SetPrefix(appName + " WARN: ")
 
 	logger.infoLogger, err = syslog.NewLogger(syslog.LOG_INFO|syslog.LOG_USER, 0)
 	if err != nil {
 		return err
 	}
-	logger.infoLogger.SetPrefix(appName + " INFO: ")
 
 	logger.debugLogger, err = syslog.NewLogger(syslog.LOG_DEBUG|syslog.LOG_USER, 0)
 	if err != nil {
 		return err
 	}
-	logger.debugLogger.SetPrefix(appName + " DEBUG: ")
 
 	return nil
 }
