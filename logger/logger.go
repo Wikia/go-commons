@@ -7,9 +7,9 @@ package logger
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"log/syslog"
-	"strconv"
 	"time"
 )
 
@@ -30,10 +30,10 @@ type LogConsumer interface {
 }
 
 const (
-	LOG_LEVEL_ERROR = 1
-	LOG_LEVEL_WARN  = 2
-	LOG_LEVEL_INFO  = 3
-	LOG_LEVEL_DEBUG = 4
+	LOG_LEVEL_ERROR = iota
+	LOG_LEVEL_WARN  = iota
+	LOG_LEVEL_INFO  = iota
+	LOG_LEVEL_DEBUG = iota
 )
 
 var logger *Logger
@@ -145,7 +145,7 @@ func (logger *Logger) convertSeverity(logLevel int) string {
 	case LOG_LEVEL_ERROR:
 		severity = "error"
 	default:
-		panic("Invalid log level: " + strconv.Itoa(logLevel))
+		panic(fmt.Sprintf("Invalid log level: %d", logLevel))
 	}
 
 	return severity
