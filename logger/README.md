@@ -5,7 +5,7 @@ Common library for logging which stores the logs in elasticsearch to be accessab
 @timestamp field automatically set to the invocation time.
 
 Sample usage:
-
+```go
 //Init the logger and set application name and minimum log level with which messages will be stored
 err := InitLogger("My application name", LOG_LEVEL_DEBUG)
 if err != nil {
@@ -23,4 +23,4 @@ logger.Info("info message") //This will create a JSON with the @message field se
 errorMap := make(map[string]interface{})
 errorMap["testField"] = "testValue"
 logger.ErrorMap(errorMap) //This will create a JSON with the @testField set to "testValue"
-
+```
