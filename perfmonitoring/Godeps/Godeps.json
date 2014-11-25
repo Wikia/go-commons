@@ -1,0 +1,11 @@
+{
+	"ImportPath": "github.com/Wikia/go-commons/perfmonitoring",
+	"GoVersion": "go1.2.1",
+	"Deps": [
+		{
+			"ImportPath": "github.com/influxdb/influxdb/client",
+			"Comment": "v0.8.6-69-gf49785a",
+			"Rev": "f49785a44f6eac03845a22a11afdc423f1ef2f0f"
+		}
+	]
+}

@@ -3,6 +3,8 @@ package perfmonitoring
 import (
 	"fmt"
 	"strings"
+
+	"github.com/Wikia/go-commons/settings"
 	"github.com/influxdb/influxdb/client"
 )
 
@@ -16,17 +18,17 @@ func NewPerfMonitoring(appName string, seriesName string) (*PerfMonitoring, erro
 	perfMon := new(PerfMonitoring)
 	perfMon.seriesName = fmt.Sprintf("%s_%s", strings.ToLower(appName), strings.ToLower(seriesName))
 	perfMon.metrics = make(map[string][]interface{})
-	settings := getSettings()
+	settings := settings.GetSettings()
 	influxConfig := new(client.ClientConfig)
-	influxConfig.Host = fmt.Sprintf("%s:%d", settings.Host, settings.UdpPort)
+	influxConfig.Host = fmt.Sprintf("%s:%d", settings.InfluxDB.Host, settings.InfluxDB.UdpPort)
 	influxConfig.IsUDP = true
 	influxClient, err := client.NewClient(influxConfig)
 	if err != nil {
 		return nil, err
-	} else {
-		perfMon.influxdbClient = influxClient
-		return perfMon, nil
 	}
+
+	perfMon.influxdbClient = influxClient
+	return perfMon, nil
 }
 
 func (perfMon *PerfMonitoring) Set(name string, value []interface{}) {
@@ -43,7 +45,6 @@ func (perfMon *PerfMonitoring) Get(name string) []interface{} {
 }
 
 func (perfMon *PerfMonitoring) Push() error {
-
 	keys := make([]string, 0, len(perfMon.metrics))
 	values := make([][]interface{}, 0, len(perfMon.metrics))
 	for k, v := range perfMon.metrics {
