@@ -15,6 +15,5 @@ func TestPerfMonGetSet(t *testing.T) {
 	if perfMon.Get("testcolumn1")[0].(int) != 5 {
 		t.FailNow()
 	}
-
 	perfMon.Push()
 }
