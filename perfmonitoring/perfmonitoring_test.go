@@ -5,10 +5,11 @@ import (
 )
 
 func TestPerfMonGetSet(t *testing.T) {
-	perfMon, err := NewPerfMonitoring("go_commons_unit_tests", "metrics")
+	influxClient, err := NewInfluxdbClient()
 	if err != nil {
 		t.Fatal(err)
 	}
+	perfMon := NewPerfMonitoring(influxClient, "go_commons_unit_tests", "metrics")
 
 	perfMon.Set("testcolumn1", []interface{}{5})
 
