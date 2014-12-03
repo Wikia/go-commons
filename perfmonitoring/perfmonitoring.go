@@ -14,10 +14,7 @@ type PerfMonitoring struct {
 	influxdbClient *client.Client
 }
 
-func NewPerfMonitoring(appName string, seriesName string) (*PerfMonitoring, error) {
-	perfMon := new(PerfMonitoring)
-	perfMon.seriesName = fmt.Sprintf("%s_%s", strings.ToLower(appName), strings.ToLower(seriesName))
-	perfMon.metrics = make(map[string][]interface{})
+func NewInfluxdbClient() (*client.Client, error) {
 	settings := settings.GetSettings()
 	influxConfig := new(client.ClientConfig)
 	influxConfig.Host = fmt.Sprintf("%s:%d", settings.InfluxDB.Host, settings.InfluxDB.UdpPort)
@@ -27,8 +24,15 @@ func NewPerfMonitoring(appName string, seriesName string) (*PerfMonitoring, erro
 		return nil, err
 	}
 
+	return influxClient, nil
+}
+
+func NewPerfMonitoring(influxClient *client.Client, appName string, seriesName string) *PerfMonitoring {
+	perfMon := new(PerfMonitoring)
+	perfMon.seriesName = fmt.Sprintf("%s_%s", strings.ToLower(appName), strings.ToLower(seriesName))
+	perfMon.metrics = make(map[string][]interface{})
 	perfMon.influxdbClient = influxClient
-	return perfMon, nil
+	return perfMon
 }
 
 func (perfMon *PerfMonitoring) Set(name string, value []interface{}) {
