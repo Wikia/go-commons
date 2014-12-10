@@ -7,7 +7,6 @@ package logger
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"log/syslog"
 	"time"
@@ -132,29 +131,10 @@ func (logger *Logger) logMessage(message string, level int, logLogger *log.Logge
 	}
 }
 
-func (logger *Logger) convertSeverity(logLevel int) string {
-
-	var severity string
-	switch logLevel {
-	case LOG_LEVEL_DEBUG:
-		severity = "debug"
-	case LOG_LEVEL_INFO:
-		severity = "info"
-	case LOG_LEVEL_WARN:
-		severity = "warn"
-	case LOG_LEVEL_ERROR:
-		severity = "error"
-	default:
-		panic(fmt.Sprintf("Invalid log level: %d", logLevel))
-	}
-
-	return severity
-}
-
 func (logger *Logger) prepareMapJsonFromMessage(message string, logLevel int) string {
 
 	entry := make(map[string]interface{})
-	entry["@message"] = message
+	entry["message"] = message
 
 	return logger.prepareMapJson(entry, logLevel)
 }
@@ -162,8 +142,6 @@ func (logger *Logger) prepareMapJsonFromMessage(message string, logLevel int) st
 func (logger *Logger) prepareMapJson(entry map[string]interface{}, logLevel int) string {
 
 	entry["@timestamp"] = time.Now().UTC().Format("2006-01-02T15:04:05.000Z")
-	entry["@severity"] = logger.convertSeverity(logLevel)
-	entry["program"] = logger.appName
 	result, err := json.Marshal(entry)
 	if err != nil {
 		panic(err)
