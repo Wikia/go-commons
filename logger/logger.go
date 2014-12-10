@@ -134,7 +134,7 @@ func (logger *Logger) logMessage(message string, level int, logLogger *log.Logge
 func (logger *Logger) prepareMapJsonFromMessage(message string, logLevel int) string {
 
 	entry := make(map[string]interface{})
-	entry["message"] = message
+	entry["@message"] = message
 
 	return logger.prepareMapJson(entry, logLevel)
 }
