@@ -24,12 +24,12 @@ func NewTimer(perfMon *PerfMonitoring, columnName string) *Timer {
 }
 
 func (timer *Timer) AddValue(columnName string, value interface{}) {
-	timer.perfMon.Set(columnName, []interface{}{value})
+	timer.perfMon.Set(columnName, value)
 }
 
 func (timer *Timer) Close() error {
 
 	measuredTime := time.Now().Sub(timer.startTime).Nanoseconds() / 1000000
-	timer.perfMon.Set(timer.columnName, []interface{}{measuredTime})
+	timer.perfMon.Set(timer.columnName, measuredTime)
 	return timer.perfMon.Push()
 }
