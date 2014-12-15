@@ -10,7 +10,7 @@ import (
 
 type PerfMonitoring struct {
 	seriesName     string
-	metrics        map[string][]interface{}
+	metrics        map[string]interface{}
 	influxdbClient *client.Client
 }
 
@@ -30,30 +30,30 @@ func NewInfluxdbClient() (*client.Client, error) {
 func NewPerfMonitoring(influxClient *client.Client, appName string, seriesName string) *PerfMonitoring {
 	perfMon := new(PerfMonitoring)
 	perfMon.seriesName = fmt.Sprintf("%s_%s", strings.ToLower(appName), strings.ToLower(seriesName))
-	perfMon.metrics = make(map[string][]interface{})
+	perfMon.metrics = make(map[string]interface{})
 	perfMon.influxdbClient = influxClient
 	return perfMon
 }
 
-func (perfMon *PerfMonitoring) Set(name string, value []interface{}) {
+func (perfMon *PerfMonitoring) Set(name string, value interface{}) {
 	perfMon.metrics[name] = value
 }
 
 func (perfMon *PerfMonitoring) Inc(name string, inc int) {
-	value := perfMon.metrics[name][0]
-	perfMon.metrics[name][0] = value.(int) + inc
+	value := perfMon.metrics[name]
+	perfMon.metrics[name] = value.(int) + inc
 }
 
-func (perfMon *PerfMonitoring) Get(name string) []interface{} {
+func (perfMon *PerfMonitoring) Get(name string) interface{} {
 	return perfMon.metrics[name]
 }
 
 func (perfMon *PerfMonitoring) Push() error {
 	keys := make([]string, 0, len(perfMon.metrics))
-	values := make([][]interface{}, 0, len(perfMon.metrics))
+	values := [][]interface{}{make([]interface{}, 0, len(perfMon.metrics))}
 	for k, v := range perfMon.metrics {
 		keys = append(keys, k)
-		values = append(values, v)
+		values[0] = append(values[0], v)
 	}
 
 	series := new(client.Series)
