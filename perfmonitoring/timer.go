@@ -29,7 +29,7 @@ func (timer *Timer) AddValue(columnName string, value interface{}) {
 
 func (timer *Timer) Close() error {
 
-	measuredTime := time.Now().Sub(timer.startTime).Nanoseconds() / 1000000
+	measuredTime := time.Now().Sub(timer.startTime).Nanoseconds() / 1000
 	timer.perfMon.Set(timer.columnName, measuredTime)
 	return timer.perfMon.Push()
 }
