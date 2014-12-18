@@ -7,7 +7,6 @@ package logger
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"log/syslog"
 	"time"
@@ -30,10 +29,10 @@ type LogConsumer interface {
 }
 
 const (
-	LOG_LEVEL_ERROR = iota
-	LOG_LEVEL_WARN  = iota
-	LOG_LEVEL_INFO  = iota
-	LOG_LEVEL_DEBUG = iota
+	LogLevelError = iota
+	LogLevelWarn  = iota
+	LogLevelInfo  = iota
+	LogLevelDebug = iota
 )
 
 var logger *Logger
@@ -81,39 +80,43 @@ func (logger *Logger) AddLogConsumer(logConsumer LogConsumer) {
 }
 
 func (logger *Logger) Error(message string) {
-	logger.logMessage(message, LOG_LEVEL_ERROR, logger.errorLogger)
+	logger.logMessage(message, LogLevelError, logger.errorLogger)
 }
 
 func (logger *Logger) ErrorErr(err error) {
-	logger.logMessage(err.Error(), LOG_LEVEL_ERROR, logger.errorLogger)
+	if err == nil {
+		return
+	}
+
+	logger.logMessage(err.Error(), LogLevelError, logger.errorLogger)
 }
 
 func (logger *Logger) ErrorMap(entry map[string]interface{}) {
-	logger.logMap(entry, LOG_LEVEL_ERROR, logger.errorLogger)
+	logger.logMap(entry, LogLevelError, logger.errorLogger)
 }
 
 func (logger *Logger) Warn(message string) {
-	logger.logMessage(message, LOG_LEVEL_WARN, logger.warnLogger)
+	logger.logMessage(message, LogLevelWarn, logger.warnLogger)
 }
 
 func (logger *Logger) WarnMap(entry map[string]interface{}) {
-	logger.logMap(entry, LOG_LEVEL_WARN, logger.warnLogger)
+	logger.logMap(entry, LogLevelWarn, logger.warnLogger)
 }
 
 func (logger *Logger) Info(message string) {
-	logger.logMessage(message, LOG_LEVEL_INFO, logger.infoLogger)
+	logger.logMessage(message, LogLevelInfo, logger.infoLogger)
 }
 
 func (logger *Logger) InfoMap(entry map[string]interface{}) {
-	logger.logMap(entry, LOG_LEVEL_INFO, logger.infoLogger)
+	logger.logMap(entry, LogLevelInfo, logger.infoLogger)
 }
 
 func (logger *Logger) Debug(message string) {
-	logger.logMessage(message, LOG_LEVEL_DEBUG, logger.debugLogger)
+	logger.logMessage(message, LogLevelDebug, logger.debugLogger)
 }
 
 func (logger *Logger) DebugMap(entry map[string]interface{}) {
-	logger.logMap(entry, LOG_LEVEL_DEBUG, logger.debugLogger)
+	logger.logMap(entry, LogLevelDebug, logger.debugLogger)
 }
 
 func (logger *Logger) logMap(entry map[string]interface{}, level int, logLogger *log.Logger) {
@@ -132,25 +135,6 @@ func (logger *Logger) logMessage(message string, level int, logLogger *log.Logge
 	}
 }
 
-func (logger *Logger) convertSeverity(logLevel int) string {
-
-	var severity string
-	switch logLevel {
-	case LOG_LEVEL_DEBUG:
-		severity = "debug"
-	case LOG_LEVEL_INFO:
-		severity = "info"
-	case LOG_LEVEL_WARN:
-		severity = "warn"
-	case LOG_LEVEL_ERROR:
-		severity = "error"
-	default:
-		panic(fmt.Sprintf("Invalid log level: %d", logLevel))
-	}
-
-	return severity
-}
-
 func (logger *Logger) prepareMapJsonFromMessage(message string, logLevel int) string {
 
 	entry := make(map[string]interface{})
@@ -162,8 +146,6 @@ func (logger *Logger) prepareMapJsonFromMessage(message string, logLevel int) st
 func (logger *Logger) prepareMapJson(entry map[string]interface{}, logLevel int) string {
 
 	entry["@timestamp"] = time.Now().UTC().Format("2006-01-02T15:04:05.000Z")
-	entry["@severity"] = logger.convertSeverity(logLevel)
-	entry["program"] = logger.appName
 	result, err := json.Marshal(entry)
 	if err != nil {
 		panic(err)

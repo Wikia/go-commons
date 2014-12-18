@@ -18,15 +18,15 @@ func (logConsumer *TestLogConsumer) Log(data string, logLevel int) {
 	}
 
 	if logConsumer.InvocationCount == 0 {
-		if logMap["@message"] != "debug message" || logLevel != LOG_LEVEL_DEBUG {
+		if logMap["@message"] != "debug message" || logLevel != LogLevelDebug {
 			logConsumer.Testing.Fatal("incorrect log message or log level: ", logMap["@message"])
 		}
 	} else if logConsumer.InvocationCount == 1 {
-		if logMap["@message"] != "info message" || logLevel != LOG_LEVEL_INFO {
+		if logMap["@message"] != "info message" || logLevel != LogLevelInfo {
 			logConsumer.Testing.Fatal("incorrect log message or log level: ", logMap["@message"])
 		}
 	} else if logConsumer.InvocationCount == 2 {
-		if logMap["testField"] != "testValue" || logLevel != LOG_LEVEL_ERROR {
+		if logMap["testField"] != "testValue" || logLevel != LogLevelError {
 			logConsumer.Testing.Fatal("incorrect log message or log level: ", logMap["testField"])
 		}
 	} else {
@@ -37,7 +37,7 @@ func (logConsumer *TestLogConsumer) Log(data string, logLevel int) {
 }
 
 func TestLogger(t *testing.T) {
-	err := InitLogger("UnitTests", LOG_LEVEL_DEBUG)
+	err := InitLogger("UnitTests", LogLevelDebug)
 	if err != nil {
 		t.Fatal(err)
 	}
