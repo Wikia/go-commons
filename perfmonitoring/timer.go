@@ -11,11 +11,16 @@ of the result in influx db
 
 type Timer struct {
 	columnName string
-	perfMon    *PerfMonitoring
+	perfMon    IPerfMonitoring
 	startTime  time.Time
 }
 
-func NewTimer(perfMon *PerfMonitoring, columnName string) *Timer {
+type IPerfMonitoring interface {
+	Set(columnName string, value interface{})
+	Push() error
+}
+
+func NewTimer(perfMon IPerfMonitoring, columnName string) *Timer {
 	timer := new(Timer)
 	timer.columnName = columnName
 	timer.perfMon = perfMon

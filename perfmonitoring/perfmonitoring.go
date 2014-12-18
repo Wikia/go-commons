@@ -62,6 +62,7 @@ func (perfMon *PerfMonitoring) Push() error {
 	series.Points = values
 
 	err := perfMon.influxdbClient.WriteSeriesOverUDP([]*client.Series{series})
+	perfMon.metrics = make(map[string]interface{}) //Reset metrics after push
 
 	return err
 }

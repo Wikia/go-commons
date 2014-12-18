@@ -14,3 +14,21 @@ perfMon.Set("ResponseTime", []interface{}{measuredValue})
 
 perfMon.Push()
 ```
+
+You can also use the timer object which automates time tracking for a given scope:
+```go
+func (helios *Helios) closeTimer(timer *perfmonitoring.Timer) {
+	err := timer.Close()
+	if err != nil {
+		logger.GetLogger().ErrorErr(err)
+	}
+}
+
+func TimerMeasuredFunc() {
+
+	timer := NewTimer(perfMon, "test_time")//Starts time measurement
+	defer closeTimer(timer) //After function finishes measured time will be pushed to InfluxDB
+
+	//Your code goes here
+}
+```

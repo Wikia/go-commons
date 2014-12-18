@@ -16,4 +16,8 @@ func TestPerfMonGetSet(t *testing.T) {
 		t.Fatal("Invalid value of testcolumn1")
 	}
 	perfMon.Push()
+
+	if perfMon.Get("testcolumn1") != nil {
+		t.Fatal("Values not cleared after push")
+	}
 }
