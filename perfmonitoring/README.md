@@ -17,7 +17,7 @@ perfMon.Push()
 
 You can also use the timer object which automates time tracking for a given scope:
 ```go
-func (helios *Helios) closeTimer(timer *perfmonitoring.Timer) {
+func closeTimer(timer *perfmonitoring.Timer) {
 	err := timer.Close()
 	if err != nil {
 		logger.GetLogger().ErrorErr(err)
