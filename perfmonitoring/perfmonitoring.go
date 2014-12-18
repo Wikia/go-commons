@@ -8,6 +8,10 @@ import (
 	"github.com/influxdb/influxdb/client"
 )
 
+/*Note that this object is designed to be used in a single thread
+If you have a multithreaded application, then it is recommended to create a new PerfMonitoring
+instance for each thread/request. The InfluxDB client can be reused in all threads.
+*/
 type PerfMonitoring struct {
 	seriesName     string
 	metrics        map[string]interface{}

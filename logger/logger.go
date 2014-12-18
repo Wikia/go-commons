@@ -29,10 +29,10 @@ type LogConsumer interface {
 }
 
 const (
-	LOG_LEVEL_ERROR = iota
-	LOG_LEVEL_WARN  = iota
-	LOG_LEVEL_INFO  = iota
-	LOG_LEVEL_DEBUG = iota
+	LogLevelError = iota
+	LogLevelWarn  = iota
+	LogLevelInfo  = iota
+	LogLevelDebug = iota
 )
 
 var logger *Logger
@@ -80,39 +80,42 @@ func (logger *Logger) AddLogConsumer(logConsumer LogConsumer) {
 }
 
 func (logger *Logger) Error(message string) {
-	logger.logMessage(message, LOG_LEVEL_ERROR, logger.errorLogger)
+	logger.logMessage(message, LogLevelError, logger.errorLogger)
 }
 
 func (logger *Logger) ErrorErr(err error) {
-	logger.logMessage(err.Error(), LOG_LEVEL_ERROR, logger.errorLogger)
+	if err == nil
+		return
+		
+	logger.logMessage(err.Error(), LogLevelError, logger.errorLogger)
 }
 
 func (logger *Logger) ErrorMap(entry map[string]interface{}) {
-	logger.logMap(entry, LOG_LEVEL_ERROR, logger.errorLogger)
+	logger.logMap(entry, LogLevelError, logger.errorLogger)
 }
 
 func (logger *Logger) Warn(message string) {
-	logger.logMessage(message, LOG_LEVEL_WARN, logger.warnLogger)
+	logger.logMessage(message, LogLevelWarn, logger.warnLogger)
 }
 
 func (logger *Logger) WarnMap(entry map[string]interface{}) {
-	logger.logMap(entry, LOG_LEVEL_WARN, logger.warnLogger)
+	logger.logMap(entry, LogLevelWarn, logger.warnLogger)
 }
 
 func (logger *Logger) Info(message string) {
-	logger.logMessage(message, LOG_LEVEL_INFO, logger.infoLogger)
+	logger.logMessage(message, LogLevelInfo, logger.infoLogger)
 }
 
 func (logger *Logger) InfoMap(entry map[string]interface{}) {
-	logger.logMap(entry, LOG_LEVEL_INFO, logger.infoLogger)
+	logger.logMap(entry, LogLevelInfo, logger.infoLogger)
 }
 
 func (logger *Logger) Debug(message string) {
-	logger.logMessage(message, LOG_LEVEL_DEBUG, logger.debugLogger)
+	logger.logMessage(message, LogLevelDebug, logger.debugLogger)
 }
 
 func (logger *Logger) DebugMap(entry map[string]interface{}) {
-	logger.logMap(entry, LOG_LEVEL_DEBUG, logger.debugLogger)
+	logger.logMap(entry, LogLevelDebug, logger.debugLogger)
 }
 
 func (logger *Logger) logMap(entry map[string]interface{}, level int, logLogger *log.Logger) {
