@@ -84,9 +84,10 @@ func (logger *Logger) Error(message string) {
 }
 
 func (logger *Logger) ErrorErr(err error) {
-	if err == nil
+	if err == nil {
 		return
-		
+	}
+
 	logger.logMessage(err.Error(), LogLevelError, logger.errorLogger)
 }
 
