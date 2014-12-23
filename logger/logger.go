@@ -7,8 +7,11 @@ package logger
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"log/syslog"
+	"runtime"
+	"strings"
 	"time"
 )
 
@@ -87,8 +90,12 @@ func (logger *Logger) ErrorErr(err error) {
 	if err == nil {
 		return
 	}
+	_, file, line, _ := runtime.Caller(1)
+	fileSlices := strings.Split(file, "/")
+	file = fileSlices[len(fileSlices)-1]
 
-	logger.logMessage(err.Error(), LogLevelError, logger.errorLogger)
+	message := fmt.Sprintf("%s:%d %s", file, line, err.Error())
+	logger.logMessage(message, LogLevelError, logger.errorLogger)
 }
 
 func (logger *Logger) ErrorMap(entry map[string]interface{}) {
