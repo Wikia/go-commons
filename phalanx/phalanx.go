@@ -8,7 +8,6 @@ import (
 const (
 	contentKey    = "content"
 	typeKey       = "type"
-	typeUser      = "user"
 	checkEndpoint = "check"
 	checkOk       = "ok\n"
 )
@@ -26,11 +25,11 @@ func NewClient(baseURL string) (*Client, error) {
 	return client, nil
 }
 
-func (client *Client) Check(name string) (bool, error) {
+func (client *Client) Check(checkType, content string) (bool, error) {
 
 	data := url.Values{}
-	data.Add(typeKey, typeUser)
-	data.Add(contentKey, name)
+	data.Add(typeKey, checkType)
+	data.Add(contentKey, content)
 
 	resBody, err := client.apiClient.Call("POST", checkEndpoint, data)
 	if err != nil {
