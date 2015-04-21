@@ -31,7 +31,12 @@ func (client *Client) Check(checkType, content string) (bool, error) {
 	data.Add(typeKey, checkType)
 	data.Add(contentKey, content)
 
-	resBody, err := client.apiClient.Call("POST", checkEndpoint, data)
+	resp, err := client.apiClient.Call("POST", checkEndpoint, data)
+	if err != nil {
+		return false, err
+	}
+
+	resBody, err := client.apiClient.GetBody(resp)
 	if err != nil {
 		return false, err
 	}
