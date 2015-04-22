@@ -22,7 +22,7 @@ func NewClient(baseURL string) (*Client, error) {
 	return client, nil
 }
 
-func (client *Client) Call(method, endpoint string, data url.Values) ([]byte, error) {
+func (client *Client) Call(method, endpoint string, data url.Values) (*http.Response, error) {
 	request, err := client.NewRequest(method, endpoint, data)
 	if err != nil {
 		return nil, err
@@ -32,14 +32,8 @@ func (client *Client) Call(method, endpoint string, data url.Values) ([]byte, er
 	if err != nil {
 		return nil, err
 	}
-	defer response.Body.Close()
 
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	return body, nil
+	return response, nil
 }
 
 func (client *Client) NewRequest(method, endpoint string, data url.Values) (*http.Request, error) {
@@ -58,4 +52,15 @@ func (client *Client) NewRequest(method, endpoint string, data url.Values) (*htt
 	request.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
 
 	return request, nil
+}
+
+func (client *Client) GetBody(resp *http.Response) ([]byte, error) {
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return body, nil
 }
