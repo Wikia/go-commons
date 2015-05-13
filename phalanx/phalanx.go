@@ -1,15 +1,18 @@
 package phalanx
 
 import (
-	"github.com/Wikia/go-commons/apiclient"
 	"net/url"
+
+	"github.com/Wikia/go-commons/apiclient"
 )
 
 const (
-	contentKey    = "content"
-	typeKey       = "type"
-	checkEndpoint = "check"
-	checkOk       = "ok\n"
+	contentKey     = "content"
+	typeKey        = "type"
+	checkEndpoint  = "check"
+	checkOk        = "ok\n"
+	checkTypeName  = "user"
+	checkTypeEmail = "email"
 )
 
 type Client struct {
@@ -23,6 +26,14 @@ func NewClient(baseURL string) (*Client, error) {
 	}
 	client := &Client{apiClient: apiClient}
 	return client, nil
+}
+
+func (client *Client) CheckName(name string) (bool, error) {
+	return client.Check(checkTypeName, name)
+}
+
+func (client *Client) CheckEmail(email string) (bool, error) {
+	return client.Check(checkTypeEmail, email)
 }
 
 func (client *Client) Check(checkType, content string) (bool, error) {
