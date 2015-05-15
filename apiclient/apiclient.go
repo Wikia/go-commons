@@ -28,6 +28,11 @@ func (client *Client) Call(method, endpoint string, data url.Values) (*http.Resp
 		return nil, err
 	}
 
+	// This seems heavy handed but as a rule we are closing the connection after
+	// GetBody below. This ensures that we are communicating our intentions in
+	// the HTTP request.
+	request.Close = true
+
 	response, err := client.httpClient.Do(request)
 	if err != nil {
 		return nil, err
