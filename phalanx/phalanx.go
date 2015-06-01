@@ -15,6 +15,12 @@ const (
 	checkTypeEmail = "email"
 )
 
+type PhalanxClient interface {
+	CheckName(name string) (bool, error)
+	CheckEmail(email string) (bool, error)
+	Check(checkType, content string) (bool, error)
+}
+
 type Client struct {
 	apiClient *apiclient.Client
 }
