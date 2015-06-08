@@ -18,9 +18,9 @@ type AddressTuple struct {
 }
 
 type ConsulResolver interface {
-	ResolveAll(name, tag string) ([]*AddressTuple, error)
-	Resolve(name, tag string) (*AddressTuple, error)
-	ResolveAddress(name, tag string) (string, error)
+	ResolveAll(name, tag string, allowStale bool) ([]*AddressTuple, error)
+	Resolve(name, tag string, allowStale bool) (*AddressTuple, error)
+	ResolveAddress(name, tag string, allowStale bool) (string, error)
 }
 
 type ConsulResolverValue struct {
@@ -31,8 +31,17 @@ func NewResolver(consulAPIClient ConsulCatalogAPI) *ConsulResolverValue {
 	return &ConsulResolverValue{consulAPIClient}
 }
 
-func (resolver *ConsulResolverValue) ResolveAll(name, tag string) ([]*AddressTuple, error) {
-	services, _, err := resolver.consulAPIClient.Service(name, tag, true, nil)
+func DefaultResolver() *ConsulResolverValue {
+	config := api.DefaultConfig()
+	config.Address = "consul.service.consul:8500"
+	client, _ := api.NewClient(config)
+	health := client.Health()
+	return &ConsulResolverValue{health}
+}
+
+func (resolver *ConsulResolverValue) ResolveAll(name, tag string, allowStale bool) ([]*AddressTuple, error) {
+	options := &api.QueryOptions{AllowStale: allowStale}
+	services, _, err := resolver.consulAPIClient.Service(name, tag, true, options)
 	if err != nil {
 		return nil, err
 	}
@@ -45,8 +54,8 @@ func (resolver *ConsulResolverValue) ResolveAll(name, tag string) ([]*AddressTup
 	return tuples, nil
 }
 
-func (resolver *ConsulResolverValue) Resolve(name, tag string) (*AddressTuple, error) {
-	services, err := resolver.ResolveAll(name, tag)
+func (resolver *ConsulResolverValue) Resolve(name, tag string, allowStale bool) (*AddressTuple, error) {
+	services, err := resolver.ResolveAll(name, tag, allowStale)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +67,13 @@ func (resolver *ConsulResolverValue) Resolve(name, tag string) (*AddressTuple, e
 	return services[rand.Intn(len(services))], nil
 }
 
-func (resolver *ConsulResolverValue) ResolveAddress(name, tag string) (string, error) {
-	return "", nil
+func (resolver *ConsulResolverValue) ResolveAddress(name, tag string, allowStale bool) (string, error) {
+	tuple, err := resolver.Resolve(name, tag, allowStale)
+	if err != nil {
+		return "", err
+	}
+
+	return tuple.ToAddress(), nil
 }
 
 func (t *AddressTuple) ToAddress() string {

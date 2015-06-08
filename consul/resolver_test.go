@@ -32,9 +32,9 @@ func (suite *ResolverTestSuite) SetupTest() {
 
 func (suite *ResolverTestSuite) TestResolveAll() {
 	suite.consul.On("Service", "auth", "production", true,
-		(*api.QueryOptions)(nil)).Return(suite.response,
+		&api.QueryOptions{AllowStale: true}).Return(suite.response,
 		(*api.QueryMeta)(nil), nil)
-	services, err := suite.resolver.ResolveAll("auth", "production")
+	services, err := suite.resolver.ResolveAll("auth", "production", true)
 	assert.Equal(suite.T(), 2, len(services), "we did not receive 2 nodes")
 	assert.Equal(suite.T(), "10.10.10.10", services[0].Address, "unexpected ip")
 	assert.Equal(suite.T(), 9500, services[0].Port, "unexpected port")
@@ -43,9 +43,9 @@ func (suite *ResolverTestSuite) TestResolveAll() {
 
 func (suite *ResolverTestSuite) TestResolve() {
 	suite.consul.On("Service", "auth", "production", true,
-		(*api.QueryOptions)(nil)).Return(suite.response,
+		&api.QueryOptions{AllowStale: true}).Return(suite.response,
 		(*api.QueryMeta)(nil), nil)
-	service, err := suite.resolver.Resolve("auth", "production")
+	service, err := suite.resolver.Resolve("auth", "production", true)
 	assert.Equal(suite.T(), "10.10.10.10", service.Address, "unexpected ip")
 	assert.Equal(suite.T(), 9500, service.Port, "unexpected port")
 	assert.Nil(suite.T(), err)
