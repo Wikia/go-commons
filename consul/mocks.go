@@ -5,11 +5,11 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type MockedConsulCatalogAPI struct {
+type MockedConsulHealthAPI struct {
 	mock.Mock
 }
 
-func (m *MockedConsulCatalogAPI) Service(service, tag string, q *api.QueryOptions) ([]*api.CatalogService, *api.QueryMeta, error) {
-	args := m.Called(service, tag, q)
-	return args.Get(0).([]*api.CatalogService), args.Get(1).(*api.QueryMeta), args.Error(2)
+func (m *MockedConsulHealthAPI) Service(service, tag string, passingOnly bool, q *api.QueryOptions) ([]*api.ServiceEntry, *api.QueryMeta, error) {
+	args := m.Called(service, tag, passingOnly, q)
+	return args.Get(0).([]*api.ServiceEntry), args.Get(1).(*api.QueryMeta), args.Error(2)
 }
