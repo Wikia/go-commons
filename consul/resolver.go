@@ -20,7 +20,7 @@ type AddressTuple struct {
 type ConsulResolver interface {
 	ResolveAll(name, tag string) ([]*AddressTuple, error)
 	Resolve(name, tag string) (*AddressTuple, error)
-	ResolveAddress(name, tag string) (string, error)
+	ResolveURI(name, tag string) (string, error)
 }
 
 type ConsulResolverValue struct {
@@ -68,16 +68,16 @@ func (resolver *ConsulResolverValue) Resolve(name, tag string) (*AddressTuple, e
 	return services[rand.Intn(len(services))], nil
 }
 
-func (resolver *ConsulResolverValue) ResolveAddress(name, tag string) (string, error) {
+func (resolver *ConsulResolverValue) ResolveURI(name, tag string) (string, error) {
 	tuple, err := resolver.Resolve(name, tag)
 	if err != nil {
 		return "", err
 	}
 
-	return tuple.ToAddress(), nil
+	return tuple.ToURI(), nil
 }
 
-func (t *AddressTuple) ToAddress() string {
+func (t *AddressTuple) ToURI() string {
 	if t != nil {
 		return fmt.Sprintf("http://%s:%d", t.Address, t.Port)
 	}

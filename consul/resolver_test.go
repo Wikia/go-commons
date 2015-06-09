@@ -55,8 +55,8 @@ func TestResolverTestSuite(t *testing.T) {
 	suite.Run(t, new(ResolverTestSuite))
 }
 
-func TestAddressTupleToAddress(t *testing.T) {
+func TestAddressTupleToURI(t *testing.T) {
 	tuple := &AddressTuple{"10.10.10.10", 80}
-	address := tuple.ToAddress()
+	address := tuple.ToURI()
 	assert.Equal(t, "http://10.10.10.10:80", address, "error, malformed address")
 }
