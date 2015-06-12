@@ -44,7 +44,7 @@ func ConsulAPIHealthClientFactory(config *api.Config) *api.Health {
 }
 
 func DefaultResolver() *ConsulResolverValue {
-	health := ConsulAPIHealthClientFactory(ConsulAPIConfigFactory("consul.service.consul:8500"))
+	health := ConsulAPIHealthClientFactory(ConsulAPIConfigFactory("localhost:8500"))
 	return NewResolver(health)
 }
 
