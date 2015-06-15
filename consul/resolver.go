@@ -32,12 +32,14 @@ func NewResolver(consulAPIClient ConsulCatalogAPI) *ConsulResolverValue {
 	return &ConsulResolverValue{consulAPIClient, true}
 }
 
-func DefaultResolver() *ConsulResolverValue {
-	config := api.DefaultConfig()
-	config.Address = "consul.service.consul:8500"
+func ConsulAPIHealthClientFactory(config *api.Config) *api.Health {
 	client, _ := api.NewClient(config)
-	health := client.Health()
-	return &ConsulResolverValue{health, true}
+	return client.Health()
+}
+
+func DefaultResolver() *ConsulResolverValue {
+	health := ConsulAPIHealthClientFactory(api.DefaultConfig())
+	return NewResolver(health)
 }
 
 func (resolver *ConsulResolverValue) ResolveAll(name, tag string) ([]*AddressTuple, error) {
