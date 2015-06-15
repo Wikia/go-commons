@@ -23,10 +23,11 @@ directly and inject that into `NewResolver`. Example:
 
 ```go
 import (
+	"github.com/hashicorp/consul/api"
 	"github.com/Wikia/go-commons/consul"
 )
 
-health := consul.ConsulAPIHealthClientFactory(consul.ConsulAPIConfigFactory("your.consul.service:8500"))
+health := consul.ConsulAPIHealthClientFactory(api.DefaultConfig())
 resolver := consul.NewResolver(health)
 address, _ := resolver.ResolveURI("user-preference", "production") // returns "http://10.10.10.10:12345"
 ```
