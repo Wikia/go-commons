@@ -18,8 +18,7 @@ address, _ := resolver.ResolveURI("user-preference", "production") // returns "h
 ```
 
 The above uses some sane defaults for consul. If you need to use a different
-host other than `consul.service.consul` you can create a `Health` client
-directly and inject that into `NewResolver`. Example:
+config you can create a `Health` client directly and inject that into `NewResolver`. Example:
 
 ```go
 import (
@@ -27,9 +26,18 @@ import (
 	"github.com/Wikia/go-commons/consul"
 )
 
-health := consul.ConsulAPIHealthClientFactory(api.DefaultConfig())
+config := api.DefaultConfig()
+client, _ := api.NewClient(config)
+health := client.Health()
 resolver := consul.NewResolver(health)
 address, _ := resolver.ResolveURI("user-preference", "production") // returns "http://10.10.10.10:12345"
+```
+
+If you only need to change the consul address, you can do set the following
+environment variable and use `NewDefaultResolver()`:
+
+```
+export CONSUL_HTTP_ADDR=consul.service.consul:8500
 ```
 
 See the package for more details regarding the configuration.
