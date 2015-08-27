@@ -22,10 +22,15 @@ func NewClient(baseURL string) (*Client, error) {
 	return client, nil
 }
 
-func (client *Client) Call(method, endpoint string, data url.Values) (*http.Response, error) {
+func (client *Client) Call(method, endpoint string, data url.Values, headers map[string]string) (*http.Response, error) {
 	request, err := client.NewRequest(method, endpoint, data)
 	if err != nil {
 		return nil, err
+	}
+
+	// adding headers
+	for header, value := range headers {
+		request.Header.Add(header, value)
 	}
 
 	// This seems heavy handed but as a rule we are closing the connection after
