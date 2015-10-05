@@ -18,8 +18,14 @@ const (
 
 type PhalanxClient interface {
 	CheckName(name string) (bool, error)
+	CheckNames(names ...string) (bool, error)
+	CheckNamesConcurrent(names ...string) (bool, error)
 	CheckEmail(email string) (bool, error)
+	CheckEmails(names ...string) (bool, error)
+	CheckEmailsConcurrent(names ...string) (bool, error)
 	Check(checkType, content string) (bool, error)
+	CheckMultiple(checkType string, content ...string) (bool, error)
+	CheckMultipleConcurrent(checkType string, content ...string) (bool, error)
 }
 
 type client struct {
