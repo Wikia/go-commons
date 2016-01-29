@@ -12,8 +12,8 @@ const (
 	checkEndpoint  = "check"
 	matchEndpoint  = "match"
 	checkOk        = "ok\n"
-	checkTypeName  = "user"
-	checkTypeEmail = "email"
+	CheckTypeName  = "user"
+	CheckTypeEmail = "email"
 )
 
 type MatchRecord struct {
@@ -50,11 +50,11 @@ func NewClient(baseURL string) (*Client, error) {
 }
 
 func (client *Client) CheckName(name string) (bool, error) {
-	return client.Check(checkTypeName, name)
+	return client.Check(CheckTypeName, name)
 }
 
 func (client *Client) CheckEmail(email string) (bool, error) {
-	return client.Check(checkTypeEmail, email)
+	return client.Check(CheckTypeEmail, email)
 }
 
 func (client *Client) Check(checkType, content string) (bool, error) {
