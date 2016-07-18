@@ -27,10 +27,10 @@ func init() {
 	settings.InfluxDB = influxDBSettings
 
 	if settings.IsDev {
-		influxDBSettings.Host = "graph-s3"
+		influxDBSettings.Host = "app-metrics-etl.service.sjc.consul"
 		influxDBSettings.UdpPort = 5551
 	} else {
-		influxDBSettings.Host = "graph-s3"
+		influxDBSettings.Host = "app-metrics-etl.service.sjc.consul"
 		influxDBSettings.UdpPort = 4444
 	}
 }
