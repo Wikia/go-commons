@@ -4,9 +4,8 @@ import (
 	"encoding/json"
 	"net/url"
 	"github.com/Wikia/go-commons/apiclient"
-
 	"golang.org/x/net/context"
-	"github.com/Wikia/helios/helpers"
+	"github.com/Wikia/go-commons/tracing"
 )
 
 const (
@@ -67,7 +66,7 @@ func (client *Client) Check(ctx context.Context, checkType, content string) (boo
 	data.Add(contentKey, content)
 
 
-	resp, err := client.apiClient.Call("POST", checkEndpoint, data, helpers.GetHeadersFromContextAsMap(ctx))
+	resp, err := client.apiClient.Call("POST", checkEndpoint, data, tracing.GetHeadersFromContextAsMap(ctx))
 	if err != nil {
 		return false, err
 	}
@@ -91,7 +90,7 @@ func (client *Client) Match(ctx context.Context, checkType, content string) ([]M
 	data.Add(typeKey, checkType)
 	data.Add(contentKey, content)
 
-	resp, err := client.apiClient.Call("POST", matchEndpoint, data, helpers.GetHeadersFromContextAsMap(ctx));
+	resp, err := client.apiClient.Call("POST", matchEndpoint, data, tracing.GetHeadersFromContextAsMap(ctx));
 	if err != nil {
 		return nil, err
 	}
