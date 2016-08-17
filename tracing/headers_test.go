@@ -1,21 +1,17 @@
 package tracing
 
 import (
-	"github.com/go-playground/lars"
 	"github.com/stretchr/testify/assert"
 	"net/http"
-	"net/http/httptest"
 	"testing"
+	"golang.org/x/net/context"
 )
 
 func TestShouldCreateRequestUsingContextDataWhereHeadersAreNotEmpty(t *testing.T) {
 	req := NewTestRequest()
-	res := httptest.NewRecorder()
 
-	c := lars.NewContext(lars.New())
-	c.RequestStart(res, req)
-	defer c.RequestEnd()
-	c = ContextSetHandlerTest(c)
+	c := context.TODO()
+	c = ContextSetHandlerTest(c,req)
 
 	newReq, _ := http.NewRequest("POST", "/theMiddleOfNowhere", nil)
 	ReturnRequestWithHeadersGivenAsMap(newReq, GetHeadersFromContextAsMap(c))
@@ -32,12 +28,9 @@ func TestShouldCreateRequestUsingContextDataWhereHeadersAreNotEmpty(t *testing.T
 
 func TestShouldCreateRequestUsingContextDataWhereHeadersAreEmpty(t *testing.T) {
 	req, _ := http.NewRequest("POST", "/theMiddleOfNowhere", nil)
-	res := httptest.NewRecorder()
 
-	c := lars.NewContext(lars.New())
-	c.RequestStart(res, req)
-	defer c.RequestEnd()
-	c = ContextSetHandlerTest(c)
+	c := context.TODO()
+	c = ContextSetHandlerTest(c, req)
 
 	newReq, _ := http.NewRequest("POST", "/theMiddleOfNowhere", nil)
 	ReturnRequestWithHeadersGivenAsMap(newReq, GetHeadersFromContextAsMap(c))
@@ -50,16 +43,16 @@ func TestShouldCreateRequestUsingContextDataWhereHeadersAreEmpty(t *testing.T) {
 	assert.Empty(t, newReq.Header.Get(XParentSpanId), "X Parent Span Id Header Should Be Empty")
 }
 
-func ContextSetHandlerTest(c *lars.Ctx) *lars.Ctx {
-	r := c.Request()
+func ContextSetHandlerTest(c context.Context, r *http.Request) context.Context {
 
-	c.WithValue(TRACE_ID, r.Header.Get(XTraceId))
-	c.WithValue(BEACON_ID, r.Header.Get(XClientBeaconId))
-	c.WithValue(DEVICE_ID, r.Header.Get(XClientDeviceId))
-	c.WithValue(CLIENT_IP, r.Header.Get(XClientIp))
-	c.WithValue(USER_ID, r.Header.Get(XUserId))
-	c.WithValue(SPAN_ID, r.Header.Get(XSpanId))
-	c.WithValue(PARENT_SPAN_ID, r.Header.Get(XParentSpanId))
+	c = context.WithValue(c, TRACE_ID, r.Header.Get(XTraceId))
+	c = context.WithValue(c, TRACE_ID, r.Header.Get(XTraceId))
+	c = context.WithValue(c, BEACON_ID, r.Header.Get(XClientBeaconId))
+	c = context.WithValue(c, DEVICE_ID, r.Header.Get(XClientDeviceId))
+	c = context.WithValue(c, CLIENT_IP, r.Header.Get(XClientIp))
+	c = context.WithValue(c, USER_ID, r.Header.Get(XUserId))
+	c = context.WithValue(c, SPAN_ID, r.Header.Get(XSpanId))
+	c = context.WithValue(c, PARENT_SPAN_ID, r.Header.Get(XParentSpanId))
 
 	return c
 }
