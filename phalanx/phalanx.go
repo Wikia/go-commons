@@ -2,17 +2,19 @@ package phalanx
 
 import (
 	"encoding/json"
-	"github.com/Wikia/go-commons/apiclient"
 	"net/url"
+	"github.com/Wikia/go-commons/apiclient"
+	"golang.org/x/net/context"
+	"github.com/Wikia/go-commons/tracing"
 )
 
 const (
-	contentKey     = "content"
-	typeKey        = "type"
-	checkEndpoint  = "check"
-	matchEndpoint  = "match"
-	checkOk        = "ok\n"
-	CheckTypeName  = "user"
+	contentKey = "content"
+	typeKey = "type"
+	checkEndpoint = "check"
+	matchEndpoint = "match"
+	checkOk = "ok\n"
+	CheckTypeName = "user"
 	CheckTypeEmail = "email"
 )
 
@@ -29,15 +31,16 @@ type MatchRecord struct {
 	Type          int    `json:"type"`
 }
 
+
 type PhalanxClient interface {
-	CheckName(name string) (bool, error)
-	CheckEmail(email string) (bool, error)
-	Check(checkType, content string) (bool, error)
-	Match(matchType, content string) ([]MatchRecord, error)
+	CheckName(ctx context.Context, name string) (bool, error)
+	CheckEmail(ctx context.Context, email string) (bool, error)
+	Check(ctx context.Context, checkType, content string) (bool, error)
+	Match(ctx context.Context, matchType, content string) ([]MatchRecord, error)
 }
 
 type Client struct {
-	apiClient *apiclient.Client
+	apiClient 	*apiclient.Client
 }
 
 func NewClient(baseURL string) (*Client, error) {
@@ -49,21 +52,21 @@ func NewClient(baseURL string) (*Client, error) {
 	return client, nil
 }
 
-func (client *Client) CheckName(name string) (bool, error) {
-	return client.Check(CheckTypeName, name)
+func (client *Client) CheckName(ctx context.Context, name string) (bool, error) {
+	return client.Check(ctx, CheckTypeName, name)
 }
 
-func (client *Client) CheckEmail(email string) (bool, error) {
-	return client.Check(CheckTypeEmail, email)
+func (client *Client) CheckEmail(ctx context.Context, email string) (bool, error) {
+	return client.Check(ctx, CheckTypeEmail, email)
 }
 
-func (client *Client) Check(checkType, content string) (bool, error) {
-
+func (client *Client) Check(ctx context.Context, checkType, content string) (bool, error) {
 	data := url.Values{}
 	data.Add(typeKey, checkType)
 	data.Add(contentKey, content)
 
-	resp, err := client.apiClient.Call("POST", checkEndpoint, data, map[string]string{})
+
+	resp, err := client.apiClient.Call("POST", checkEndpoint, data, tracing.GetHeadersFromContextAsMap(ctx))
 	if err != nil {
 		return false, err
 	}
@@ -80,14 +83,14 @@ func (client *Client) Check(checkType, content string) (bool, error) {
 	return false, nil
 }
 
-func (client *Client) Match(checkType, content string) ([]MatchRecord, error) {
+func (client *Client) Match(ctx context.Context, checkType, content string) ([]MatchRecord, error) {
 	response := make([]MatchRecord, 0)
 
 	data := url.Values{}
 	data.Add(typeKey, checkType)
 	data.Add(contentKey, content)
 
-	resp, err := client.apiClient.Call("POST", matchEndpoint, data, map[string]string{})
+	resp, err := client.apiClient.Call("POST", matchEndpoint, data, tracing.GetHeadersFromContextAsMap(ctx));
 	if err != nil {
 		return nil, err
 	}

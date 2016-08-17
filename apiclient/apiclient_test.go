@@ -72,7 +72,7 @@ func TestCallWithoutHeaders(t *testing.T) {
 	assert.NoError(t, err, fmt.Sprintf("Error deserializing JSON: %#v", response.Body))
 
 	data := f.(map[string]interface{})
-	assert.Equal(t, 3, len(data), "Incorrect number of headers sent")
+	assert.Equal(t, 4, len(data), "Incorrect number of headers sent")
 
 	for k, v := range data {
 		fmt.Printf("%v: %v\n", k, v.(string))
@@ -85,4 +85,6 @@ func TestCallWithoutHeaders(t *testing.T) {
 
 	assert.NotNil(t, data["Host"], "Host is missing")
 	assert.Equal(t, "headers.jsontest.com", data["Host"].(string), "Host is invalid")
+
+	assert.NotNil(t, data["X-Cloud-Trace-Context"], "X-Cloud-Trace-Context is missing")
 }
