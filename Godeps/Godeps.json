@@ -1,7 +1,36 @@
 {
-	"ImportPath": "github.com/Wikia/go-commons/perfmonitoring",
-	"GoVersion": "go1.2.1",
+	"ImportPath": "github.com/Wikia/go-commons",
+	"GoVersion": "go1.6",
+	"GodepVersion": "v74",
+	"Packages": [
+		"./..."
+	],
 	"Deps": [
+		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.10.0",
+			"Rev": "4b6ea7319e214d98c938f12692336f7ca9348d6b"
+		},
+		{
+			"ImportPath": "github.com/go-playground/form",
+			"Comment": "v2.1.0",
+			"Rev": "ec9eaa926768446bbd1e7f8fbc549027fc3b83ce"
+		},
+		{
+			"ImportPath": "github.com/go-playground/lars",
+			"Comment": "v3.2.0-1-g32f438e",
+			"Rev": "32f438e8672bd4a3ccd2f94c554e3fd2b0dad991"
+		},
+		{
+			"ImportPath": "github.com/gorilla/websocket",
+			"Comment": "v1.0.0-20-ga69d25b",
+			"Rev": "a69d25be2fe2923a97c2af6849b2f52426f68fc0"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/consul/api",
+			"Comment": "v0.5.2-72-g5aa9045",
+			"Rev": "5aa90455ce78d4d41578bafc86305e6e6b28d7d2"
+		},
 		{
 			"ImportPath": "github.com/influxdb/influxdb/client",
 			"Comment": "v0.8.6-69-gf49785a",
@@ -18,6 +47,18 @@
 		{
 			"ImportPath": "github.com/stretchr/testify/mock",
 			"Rev": "ae37dedcaae6fce497569786a8694aa3daa97abf"
+		},
+		{
+			"ImportPath": "github.com/stretchr/testify/suite",
+			"Rev": "ae37dedcaae6fce497569786a8694aa3daa97abf"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "7c62cfdcccc65f87b0120ec841012ba816fc1aec"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "320cb01ddbbf0473674c2585f9b6e245721de355"
 		}
 	]
 }
