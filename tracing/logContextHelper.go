@@ -56,5 +56,7 @@ func WithContext(c context.Context) *log.Entry {
 		}
 	}
 
-	return log.WithFields(fields)
+	return log.WithFields(log.Fields{
+		"@fields": fields,
+	})
 }
