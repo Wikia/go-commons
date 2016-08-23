@@ -20,27 +20,12 @@ const (
 func GetHeadersFromContextAsMap(c context.Context) map[string]string {
 	headers := map[string]string{}
 
-	if c.Value(TRACE_ID) != nil {
-		headers[XTraceId] = c.Value(TRACE_ID).(string)
+	for key, val := range ContextFields {
+		if val != "" && c.Value(key) != nil {
+			headers[val] = c.Value(key).(string)
+		}
 	}
-	if c.Value(BEACON_ID) != nil {
-		headers[XClientBeaconId] = c.Value(BEACON_ID).(string)
-	}
-	if c.Value(DEVICE_ID) != nil {
-		headers[XClientDeviceId] = c.Value(DEVICE_ID).(string)
-	}
-	if c.Value(CLIENT_IP) != nil {
-		headers[XClientIp] = c.Value(CLIENT_IP).(string)
-	}
-	if c.Value(USER_ID) != nil {
-		headers[XUserId] = c.Value(USER_ID).(string)
-	}
-	if c.Value(WIKIA_USER_ID) != nil {
-		headers[XWikiaUserId] = c.Value(WIKIA_USER_ID).(string)
-	}
-	if c.Value(FORWARDED) != nil {
-		headers[XForwardedFor] = c.Value(FORWARDED).(string)
-	}
+
 	if c.Value(SPAN_ID) != nil {
 		headers[XParentSpanId] = c.Value(SPAN_ID).(string)
 	}

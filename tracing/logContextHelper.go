@@ -26,35 +26,37 @@ const (
 	DATA_CENTER = "datacenter"
 )
 
-var ContextFields = [17]string{
-	"user_id",
-	"wikia_user_id",
-	"http_method",
-	"http_url_domain",
-	"http_url_path",
-	"http_url_query_param",
-	"http_url",
-	"beacon_id",
-	"client_ip",
-	"device_id",
-	"forwarder_for",
-	"span_id",
-	"parent_span_id",
-	"trace_id",
+var ContextFields = map[string]string{
+	USER_ID: XUserId,
+	WIKIA_USER_ID: XWikiaUserId,
+	HTTP_METHOD: "",
+	HTTP_DOMAIN: "",
+	HTTP_PATH: "",
+	HTTP_PARAM: "",
+	HTTP_URL: "",
+	BEACON_ID: XClientBeaconId,
+	CLIENT_IP: XClientIp,
+	DEVICE_ID: XClientDeviceId,
+	FORWARDED: XForwardedFor,
+	SPAN_ID: "",
+	PARENT_SPAN_ID: XParentSpanId,
+	TRACE_ID: XTraceId,
 
-	"wiki_id",
-	"environment",
-	"datacenter",
+	WIKI_ID: "",
+	ENVIRONMENT: "",
+	DATA_CENTER: "",
 }
 
 func WithContext(c context.Context) *log.Entry {
 	fields := log.Fields{}
 
-	for _, val := range ContextFields {
+	for val, _ := range ContextFields {
 		if c.Value(val) != nil {
 			fields[val] = c.Value(val).(string)
 		}
 	}
 
-	return log.WithFields(fields)
+	return log.WithFields(log.Fields{
+		"@fields": fields,
+	})
 }
