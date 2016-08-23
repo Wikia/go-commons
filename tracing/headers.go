@@ -17,11 +17,22 @@ const (
 	XForwardedFor	string = "X-Forwarded-For"
 )
 
+var ContextHeaderFields = map[string]string{
+	USER_ID: XUserId,
+	WIKIA_USER_ID: XWikiaUserId,
+	BEACON_ID: XClientBeaconId,
+	CLIENT_IP: XClientIp,
+	DEVICE_ID: XClientDeviceId,
+	FORWARDED: XForwardedFor,
+	PARENT_SPAN_ID: XParentSpanId,
+	TRACE_ID: XTraceId,
+}
+
 func GetHeadersFromContextAsMap(c context.Context) map[string]string {
 	headers := map[string]string{}
 
-	for key, val := range ContextFields {
-		if val != "" && c.Value(key) != nil {
+	for key, val := range ContextHeaderFields {
+		if c.Value(key) != nil {
 			headers[val] = c.Value(key).(string)
 		}
 	}
