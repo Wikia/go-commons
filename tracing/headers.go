@@ -2,7 +2,6 @@ package tracing
 
 import (
 	"golang.org/x/net/context"
-	"net/http"
 )
 
 const (
@@ -42,10 +41,4 @@ func GetHeadersFromContextAsMap(c context.Context) map[string]string {
 	}
 
 	return headers
-}
-
-func ReturnRequestWithHeadersGivenAsMap(r *http.Request, dataMap map[string]string) {
-	for header, value := range dataMap {
-		r.Header.Add(header, value)
-	}
 }
