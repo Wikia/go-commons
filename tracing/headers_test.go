@@ -7,6 +7,13 @@ import (
 	"golang.org/x/net/context"
 )
 
+
+func returnRequestWithHeadersGivenAsMap(r *http.Request, dataMap map[string]string) {
+	for header, value := range dataMap {
+		r.Header.Add(header, value)
+	}
+}
+
 func TestShouldCreateRequestUsingContextDataWhereHeadersAreNotEmpty(t *testing.T) {
 	req := NewTestRequest()
 
@@ -14,7 +21,7 @@ func TestShouldCreateRequestUsingContextDataWhereHeadersAreNotEmpty(t *testing.T
 	c = ContextSetHandlerTest(c,req)
 
 	newReq, _ := http.NewRequest("POST", "/theMiddleOfNowhere", nil)
-	ReturnRequestWithHeadersGivenAsMap(newReq, GetHeadersFromContextAsMap(c))
+	returnRequestWithHeadersGivenAsMap(newReq, GetHeadersFromContextAsMap(c))
 
 	expected := GetTestHeadersAsMap()
 
@@ -33,7 +40,7 @@ func TestShouldCreateRequestUsingContextDataWhereHeadersAreEmpty(t *testing.T) {
 	c = ContextSetHandlerTest(c, req)
 
 	newReq, _ := http.NewRequest("POST", "/theMiddleOfNowhere", nil)
-	ReturnRequestWithHeadersGivenAsMap(newReq, GetHeadersFromContextAsMap(c))
+	returnRequestWithHeadersGivenAsMap(newReq, GetHeadersFromContextAsMap(c))
 
 	assert.Empty(t, newReq.Header.Get(XTraceId), "X Trace Id Header Should Be Empty")
 	assert.Empty(t, newReq.Header.Get(XClientBeaconId), "X Client Beacon Id Header Should Be Empty")

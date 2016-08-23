@@ -26,31 +26,31 @@ const (
 	DATA_CENTER = "datacenter"
 )
 
-var ContextFields = [17]string{
-	"user_id",
-	"wikia_user_id",
-	"http_method",
-	"http_url_domain",
-	"http_url_path",
-	"http_url_query_param",
-	"http_url",
-	"beacon_id",
-	"client_ip",
-	"device_id",
-	"forwarder_for",
-	"span_id",
-	"parent_span_id",
-	"trace_id",
+var contextFields = [17]string{
+	USER_ID,
+	WIKIA_USER_ID,
+	HTTP_METHOD,
+	HTTP_DOMAIN,
+	HTTP_PATH,
+	HTTP_PARAM,
+	HTTP_URL,
+	BEACON_ID,
+	CLIENT_IP,
+	DEVICE_ID,
+	FORWARDED,
+	SPAN_ID,
+	PARENT_SPAN_ID,
+	TRACE_ID,
 
-	"wiki_id",
-	"environment",
-	"datacenter",
+	WIKI_ID,
+	ENVIRONMENT,
+	DATA_CENTER,
 }
 
 func WithContext(c context.Context) *log.Entry {
 	fields := log.Fields{}
 
-	for _, val := range ContextFields {
+	for _, val := range contextFields {
 		if c.Value(val) != nil {
 			fields[val] = c.Value(val).(string)
 		}
