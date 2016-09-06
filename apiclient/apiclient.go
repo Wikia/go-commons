@@ -24,19 +24,16 @@ func NewClient(baseURL string) (*Client, error) {
 }
 
 func NewClientWithProxy(baseURL string, proxy string) (*Client, error) {
-	parsedURL, err := url.Parse(baseURL)
-	if err != nil {
-		return nil, err
-	}
-	client := &Client{httpClient: &http.Client{}, BaseURL: parsedURL}
+	client, err := NewClient(baseURL)
 	if proxy == "" {
-		return client, nil
+		return client, err
 	}
 
 	proxyURL, err := url.Parse(proxy)
 	if err == nil {
-		client = &Client{httpClient: &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyURL)}}, BaseURL: parsedURL}
+		client.httpClient.Transport = &http.Transport{Proxy: http.ProxyURL(proxyURL)};
 	}
+
 
 	return client, nil
 }
