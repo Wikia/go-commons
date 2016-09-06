@@ -60,7 +60,7 @@ func TestIfHttpClientsAreDifferent(t *testing.T) {
 	client1, _ := NewClientWithProxy(BaseURL, ProxyURL)
 	client2, _ := NewClientWithProxy(BaseURL, ProxyURL)
 
-	assert.NotEqual(t, client1, client2)
+	assert.NotEqual(t, client1.httpClient, client2.httpClient)
 }
 
 func TestCallWithHeaders(t *testing.T) {
