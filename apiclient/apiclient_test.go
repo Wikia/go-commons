@@ -46,10 +46,21 @@ func TestNewRequestWithProxy(t *testing.T) {
 	assert.Nil(t, err, "NewRequest creation error")
 
 	assert.Equal(t, EndpointURL, request.URL.String(), "NewRequest endpoint URL")
+}
 
-	_, err = client.NewRequest("GET", BadEndpoint, nil)
+func TestNewRequestWithProxyBadEndpoint(t *testing.T) {
+	client, _ := NewClientWithProxy(BaseURL, ProxyURL)
+
+	_, err := client.NewRequest("GET", BadEndpoint, nil)
 
 	assert.NotNil(t, err, "NewRequest bad URL no error")
+}
+
+func TestIfHttpClientsAreDifferent(t *testing.T) {
+	client1, _ := NewClientWithProxy(BaseURL, ProxyURL)
+	client2, _ := NewClientWithProxy(BaseURL, ProxyURL)
+
+	assert.NotEqual(t, client1, client2)
 }
 
 func TestCallWithHeaders(t *testing.T) {
