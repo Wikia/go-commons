@@ -9,6 +9,7 @@ import (
 
 var (
 	BaseURL     = "http://wikia.com"
+	ProxyURL    = "http://dev.icache.service.sjc-dev.consul:80"
 	Endpoint    = "test"
 	EndpointURL = BaseURL + "/" + Endpoint
 	BadEndpoint = ":"
@@ -35,6 +36,31 @@ func TestNewRequest(t *testing.T) {
 	_, err = client.NewRequest("GET", BadEndpoint, nil)
 
 	assert.NotNil(t, err, "NewRequest bad URL no error")
+}
+
+func TestNewRequestWithProxy(t *testing.T) {
+	client, _ := NewClientWithProxy(BaseURL, ProxyURL)
+
+	request, err := client.NewRequest("GET", Endpoint, nil)
+
+	assert.Nil(t, err, "NewRequest creation error")
+
+	assert.Equal(t, EndpointURL, request.URL.String(), "NewRequest endpoint URL")
+}
+
+func TestNewRequestWithProxyBadEndpoint(t *testing.T) {
+	client, _ := NewClientWithProxy(BaseURL, ProxyURL)
+
+	_, err := client.NewRequest("GET", BadEndpoint, nil)
+
+	assert.NotNil(t, err, "NewRequest bad URL no error")
+}
+
+func TestIfHttpClientsAreDifferent(t *testing.T) {
+	client1, _ := NewClientWithProxy(BaseURL, ProxyURL)
+	client2, _ := NewClientWithProxy(BaseURL, ProxyURL)
+
+	assert.NotEqual(t, client1.httpClient, client2.httpClient)
 }
 
 func TestCallWithHeaders(t *testing.T) {

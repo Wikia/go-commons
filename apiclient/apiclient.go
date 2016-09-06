@@ -18,7 +18,22 @@ func NewClient(baseURL string) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	client := &Client{httpClient: http.DefaultClient, BaseURL: parsedURL}
+	client := &Client{httpClient: &http.Client{}, BaseURL: parsedURL}
+
+	return client, nil
+}
+
+func NewClientWithProxy(baseURL string, proxy string) (*Client, error) {
+	client, err := NewClient(baseURL)
+	if proxy == "" || err != nil {
+		return client, err
+	}
+
+	proxyURL, err := url.Parse(proxy)
+	if err == nil {
+		client.httpClient.Transport = &http.Transport{Proxy: http.ProxyURL(proxyURL)}
+	}
+
 	return client, nil
 }
 
