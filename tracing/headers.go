@@ -14,6 +14,7 @@ const (
 	XParentSpanId   string = "X-Parent-Span-Id"
 	XWikiaUserId	string = "X-Wikia-UserId"
 	XForwardedFor	string = "X-Forwarded-For"
+	XSJCShieldsHealthy string = "X-SJC-shields-healthy"
 )
 
 var ContextHeaderFields = map[string]string{
@@ -25,6 +26,7 @@ var ContextHeaderFields = map[string]string{
 	FORWARDED: XForwardedFor,
 	PARENT_SPAN_ID: XParentSpanId,
 	TRACE_ID: XTraceId,
+	X_SJC_SHIELD: XSJCShieldsHealthy,
 }
 
 func GetHeadersFromContextAsMap(c context.Context) map[string]string {
