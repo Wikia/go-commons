@@ -25,10 +25,10 @@ const (
 	ENVIRONMENT = "environment"
 	DATA_CENTER = "datacenter"
 
-	X_SJC_SHIELD = "sjc_shields_status"
+	X_SJC_SHIELD_STATUS = "sjc_shields_status"
 
 	shield_unhealthy_value = "0"
-	shield_unhealthy_log = "unhealthy"
+	shield_unhealthy_log   = "unhealthy"
 )
 
 var contextFields = [17]string{
@@ -61,8 +61,8 @@ func WithContext(c context.Context) *log.Entry {
 		}
 	}
 
-	if c.Value(X_SJC_SHIELD) != nil && c.Value(X_SJC_SHIELD)==shield_unhealthy_value {
-		fields[X_SJC_SHIELD] = shield_unhealthy_log
+	if c.Value(X_SJC_SHIELD_STATUS) != nil && c.Value(X_SJC_SHIELD_STATUS) == shield_unhealthy_value {
+		fields[X_SJC_SHIELD_STATUS] = shield_unhealthy_log
 	}
 
 	return log.WithFields(log.Fields{

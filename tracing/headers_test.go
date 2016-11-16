@@ -2,11 +2,10 @@ package tracing
 
 import (
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/net/context"
 	"net/http"
 	"testing"
-	"golang.org/x/net/context"
 )
-
 
 func returnRequestWithHeadersGivenAsMap(r *http.Request, dataMap map[string]string) {
 	for header, value := range dataMap {
@@ -18,7 +17,7 @@ func TestShouldCreateRequestUsingContextDataWhereHeadersAreNotEmpty(t *testing.T
 	req := NewTestRequest()
 
 	c := context.TODO()
-	c = ContextSetHandlerTest(c,req)
+	c = ContextSetHandlerTest(c, req)
 
 	newReq, _ := http.NewRequest("POST", "/theMiddleOfNowhere", nil)
 	returnRequestWithHeadersGivenAsMap(newReq, GetHeadersFromContextAsMap(c))
@@ -61,7 +60,7 @@ func ContextSetHandlerTest(c context.Context, r *http.Request) context.Context {
 	c = context.WithValue(c, USER_ID, r.Header.Get(XUserId))
 	c = context.WithValue(c, SPAN_ID, r.Header.Get(XSpanId))
 	c = context.WithValue(c, PARENT_SPAN_ID, r.Header.Get(XParentSpanId))
-	c = context.WithValue(c, X_SJC_SHIELD, r.Header.Get(XSJCShieldsHealthy))
+	c = context.WithValue(c, X_SJC_SHIELD_STATUS, r.Header.Get(XSJCShieldsHealthy))
 
 	return c
 }
