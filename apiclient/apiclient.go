@@ -8,6 +8,12 @@ import (
 	"strconv"
 )
 
+type ApiClient interface {
+	Call(method, endpoint string, data url.Values, headers map[string]string) (*http.Response, error)
+	NewRequest(method, endpoint string, data url.Values) (*http.Request, error)
+	GetBody(resp *http.Response) ([]byte, error)
+}
+
 type Client struct {
 	httpClient *http.Client
 	BaseURL    *url.URL

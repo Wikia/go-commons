@@ -3,19 +3,24 @@ package phalanx
 import (
 	"encoding/json"
 	"net/url"
+	"time"
+
 	"github.com/Wikia/go-commons/apiclient"
-	"golang.org/x/net/context"
 	"github.com/Wikia/go-commons/tracing"
+	"golang.org/x/net/context"
 )
 
 const (
-	contentKey = "content"
-	typeKey = "type"
-	checkEndpoint = "check"
-	matchEndpoint = "match"
-	checkOk = "ok\n"
-	CheckTypeName = "user"
+	contentKey     = "content"
+	typeKey        = "type"
+	checkEndpoint  = "check"
+	matchEndpoint  = "match"
+	checkOk        = "ok\n"
+	CheckTypeName  = "user"
 	CheckTypeEmail = "email"
+
+	retriesLimit = 3
+	retrySleep   = 20
 )
 
 type MatchRecord struct {
@@ -31,7 +36,6 @@ type MatchRecord struct {
 	Type          int    `json:"type"`
 }
 
-
 type PhalanxClient interface {
 	CheckName(ctx context.Context, name string) (bool, error)
 	CheckEmail(ctx context.Context, email string) (bool, error)
@@ -40,7 +44,7 @@ type PhalanxClient interface {
 }
 
 type Client struct {
-	apiClient 	*apiclient.Client
+	apiClient apiclient.ApiClient
 }
 
 func NewClient(baseURL string) (*Client, error) {
@@ -65,13 +69,7 @@ func (client *Client) Check(ctx context.Context, checkType, content string) (boo
 	data.Add(typeKey, checkType)
 	data.Add(contentKey, content)
 
-
-	resp, err := client.apiClient.Call("POST", checkEndpoint, data, tracing.GetHeadersFromContextAsMap(ctx))
-	if err != nil {
-		return false, err
-	}
-
-	resBody, err := client.apiClient.GetBody(resp)
+	resBody, err := client.doRequestWithRetries(ctx, checkEndpoint, data)
 	if err != nil {
 		return false, err
 	}
@@ -90,12 +88,7 @@ func (client *Client) Match(ctx context.Context, checkType, content string) ([]M
 	data.Add(typeKey, checkType)
 	data.Add(contentKey, content)
 
-	resp, err := client.apiClient.Call("POST", matchEndpoint, data, tracing.GetHeadersFromContextAsMap(ctx));
-	if err != nil {
-		return nil, err
-	}
-
-	resBody, err := client.apiClient.GetBody(resp)
+	resBody, err := client.doRequestWithRetries(ctx, matchEndpoint, data)
 	if err != nil {
 		return nil, err
 	}
@@ -106,4 +99,38 @@ func (client *Client) Match(ctx context.Context, checkType, content string) ([]M
 	}
 
 	return response, nil
+}
+
+func (client *Client) doRequestWithRetries(ctx context.Context, endpoint string, data url.Values) ([]byte, error) {
+	var resBody []byte
+	var err error
+	tries := 1
+
+	for tries <= retriesLimit {
+		resBody, err = client.doRequest(ctx, endpoint, data)
+		if err == nil {
+			break
+		}
+
+		if tries < retriesLimit {
+			time.Sleep(retrySleep * time.Millisecond)
+		}
+		tries++
+	}
+
+	return resBody, err
+}
+
+func (client *Client) doRequest(ctx context.Context, endpoint string, data url.Values) ([]byte, error) {
+	resp, err := client.apiClient.Call("POST", endpoint, data, tracing.GetHeadersFromContextAsMap(ctx))
+	if err != nil {
+		return nil, err
+	}
+
+	resBody, err := client.apiClient.GetBody(resp)
+	if err != nil {
+		return nil, err
+	}
+
+	return resBody, nil
 }
