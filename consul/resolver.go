@@ -37,8 +37,11 @@ func ConsulAPIHealthClientFactory(config *api.Config) *api.Health {
 	return client.Health()
 }
 
-func DefaultResolver() *ConsulResolverValue {
-	health := ConsulAPIHealthClientFactory(api.DefaultConfig())
+func DefaultResolver(consulHost string, consulPort uint64) *ConsulResolverValue {
+	config := api.DefaultConfig()
+	config.Address = fmt.Sprintf("%s:%d", consulHost, consulPort)
+
+	health := ConsulAPIHealthClientFactory(config)
 	return NewResolver(health)
 }
 
