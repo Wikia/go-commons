@@ -46,8 +46,11 @@ func GetHeadersFromContextAsMap(c context.Context) map[string]string {
 	return headers
 }
 
-func SetHttpHeadersFromContext(headers *http.Header, c context.Context) {
+func AddHttpHeadersFromContext(headers http.Header, c context.Context) http.Header {
 	for header, val := range GetHeadersFromContextAsMap(c) {
-		headers.Set(header, val)
+		if len(headers[header]) == 0 {
+			headers[header] = []string{val}
+		}
 	}
+	return headers
 }

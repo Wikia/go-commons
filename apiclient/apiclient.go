@@ -51,7 +51,7 @@ func (client *Client) Call(method, endpoint string, data url.Values, headers map
 
 	// adding headers
 	for header, value := range headers {
-		request.Header.Add(header, value)
+		request.Header[header] = []string{value}
 	}
 
 	// This seems heavy handed but as a rule we are closing the connection after
