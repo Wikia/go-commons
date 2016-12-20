@@ -14,7 +14,7 @@ func TestShouldCreateRequestUsingContextDataWhereHeadersAreNotEmpty(t *testing.T
 	c = ContextSetHandlerTest(c, req)
 
 	newReq, _ := http.NewRequest("POST", "/theMiddleOfNowhere", nil)
-	SetHttpHeadersFromContext(&newReq.Header, c)
+	newReq.Header = AddHttpHeadersFromContext(newReq.Header, c)
 
 	expected := GetTestHeadersAsMap()
 
@@ -34,7 +34,7 @@ func TestShouldCreateRequestUsingContextDataWhereHeadersAreEmpty(t *testing.T) {
 	c = ContextSetHandlerTest(c, req)
 
 	newReq, _ := http.NewRequest("POST", "/theMiddleOfNowhere", nil)
-	SetHttpHeadersFromContext(&newReq.Header, c)
+	newReq.Header = AddHttpHeadersFromContext(newReq.Header, c)
 
 	assert.Empty(t, newReq.Header.Get(XTraceId), "X Trace Id Header Should Be Empty")
 	assert.Empty(t, newReq.Header.Get(XClientBeaconId), "X Client Beacon Id Header Should Be Empty")
