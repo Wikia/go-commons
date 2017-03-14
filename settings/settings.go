@@ -13,25 +13,26 @@ type InfluxDBSettings struct {
 
 type Settings struct {
 	InfluxDB *InfluxDBSettings
-	IsDev    bool
 }
 
 var settings *Settings
 
 func init() {
-	env := os.Getenv(ENV_VAR)
 	settings = new(Settings)
-	settings.IsDev = env == "dev" || env == ""
 
 	influxDBSettings := new(InfluxDBSettings)
 	settings.InfluxDB = influxDBSettings
 
-	if settings.IsDev {
-		influxDBSettings.Host = "app-metrics-etl.service.sjc.consul"
-		influxDBSettings.UdpPort = 5551
-	} else {
-		influxDBSettings.Host = "app-metrics-etl.service.sjc.consul"
+	env := os.Getenv(ENV_VAR)
+	if env == "prod" {
+		influxDBSettings.Host = "prod.app-metrics-etl.service.sjc.consul"
 		influxDBSettings.UdpPort = 4444
+	} else if env == "staging" {
+		influxDBSettings.Host = "staging.app-metrics-etl.service.sjc.consul"
+		influxDBSettings.UdpPort = 5552
+	} else {
+		influxDBSettings.Host = "prod.app-metrics-etl.service.sjc.consul"
+		influxDBSettings.UdpPort = 5551
 	}
 }
 
