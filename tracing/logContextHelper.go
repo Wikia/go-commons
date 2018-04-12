@@ -26,6 +26,8 @@ const (
 	DATA_CENTER = "datacenter"
 
 	X_SJC_SHIELD_STATUS = "sjc_shields_status"
+	
+	ContextFieldsKey = "@fields"
 
 	shield_unhealthy_value = "0"
 	shield_unhealthy_log   = "unhealthy"
@@ -66,6 +68,6 @@ func WithContext(c context.Context) *log.Entry {
 	}
 
 	return log.WithFields(log.Fields{
-		"@fields": fields,
+		ContextFieldsKey: fields,
 	})
 }
