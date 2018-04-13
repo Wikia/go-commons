@@ -1,21 +1,22 @@
 package tracing
 
 import (
-	"golang.org/x/net/context"
 	"net/http"
+
+	"golang.org/x/net/context"
 )
 
 const (
-	XTraceId           string = "X-Trace-Id"
-	XClientBeaconId    string = "X-Client-Beacon-Id"
-	XClientDeviceId    string = "X-Client-Device-Id"
-	XClientIp          string = "X-Client-Ip"
-	XUserId            string = "X-User-Id"
-	XSpanId            string = "X-Span-Id"
-	XParentSpanId      string = "X-Parent-Span-Id"
-	XWikiaUserId       string = "X-Wikia-UserId"
-	XForwardedFor      string = "X-Forwarded-For"
-	XSJCShieldsHealthy string = "X-SJC-shields-healthy"
+	XTraceId           = "X-Trace-Id"
+	XClientBeaconId    = "X-Client-Beacon-Id"
+	XClientDeviceId    = "X-Client-Device-Id"
+	XClientIp          = "X-Client-Ip"
+	XUserId            = "X-User-Id"
+	XSpanId            = "X-Span-Id"
+	XParentSpanId      = "X-Parent-Span-Id"
+	XWikiaUserId       = "X-Wikia-UserId"
+	XForwardedFor      = "X-Forwarded-For"
+	XSJCShieldsHealthy = "X-SJC-shields-healthy"
 )
 
 var ContextHeaderFields = map[string]string{

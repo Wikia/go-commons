@@ -11,7 +11,7 @@ type ApiClientMock struct {
 	mock.Mock
 }
 
-func (m *ApiClientMock) Call(method, endpoint string, data url.Values, headers map[string]string) (*http.Response, error) {
+func (m *ApiClientMock) Call(method, endpoint string, data url.Values, headers http.Header) (*http.Response, error) {
 	args := m.Called(method, endpoint, data, headers)
 	return args.Get(0).(*http.Response), args.Error(1)
 }

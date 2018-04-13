@@ -2,11 +2,14 @@ package phalanx
 
 import (
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"time"
 
 	"github.com/Wikia/go-commons/apiclient"
 	"github.com/Wikia/go-commons/tracing"
+	"github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/ext"
 	"golang.org/x/net/context"
 )
 
@@ -122,7 +125,17 @@ func (client *Client) doRequestWithRetries(ctx context.Context, endpoint string,
 }
 
 func (client *Client) doRequest(ctx context.Context, endpoint string, data url.Values) ([]byte, error) {
-	resp, err := client.apiClient.Call("POST", endpoint, data, tracing.GetHeadersFromContextAsMap(ctx))
+	headers := http.Header{}
+	span, _ := opentracing.StartSpanFromContext(ctx, "phalanx-request")
+	if span != nil {
+		defer span.Finish()
+		ext.SpanKindRPCClient.Set(span)
+		ext.HTTPUrl.Set(span, endpoint)
+		ext.HTTPMethod.Set(span, http.MethodPost)
+		span.Tracer().Inject(span.Context(), opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(headers))
+	}
+
+	resp, err := client.apiClient.Call("POST", endpoint, data, tracing.AddHttpHeadersFromContext(headers, ctx))
 	if err != nil {
 		return nil, err
 	}

@@ -37,7 +37,7 @@ func (suite *PhalanxTestSuite) SetupTest() {
 
 func (suite *PhalanxTestSuite) TestRetriesSuccess() {
 	suite.apiClientMock.On("Call", "POST", checkEndpoint, suite.requestData,
-		tracing.GetHeadersFromContextAsMap(suite.ctx)).Return(suite.httpResponse, nil).Once()
+		tracing.AddHttpHeadersFromContext(http.Header{}, suite.ctx)).Return(suite.httpResponse, nil).Once()
 	suite.apiClientMock.On("GetBody", suite.httpResponse).Return([]byte(checkOk), nil).Once()
 
 	result, err := suite.phalanxClient.CheckName(suite.ctx, suite.requestData.Get(contentKey))
@@ -49,9 +49,9 @@ func (suite *PhalanxTestSuite) TestRetriesSuccess() {
 
 func (suite *PhalanxTestSuite) TestRetriesFailedTwice() {
 	suite.apiClientMock.On("Call", "POST", checkEndpoint, suite.requestData,
-		tracing.GetHeadersFromContextAsMap(suite.ctx)).Return(suite.httpResponse, errors.New("error")).Twice()
+		tracing.AddHttpHeadersFromContext(http.Header{}, suite.ctx)).Return(suite.httpResponse, errors.New("error")).Twice()
 	suite.apiClientMock.On("Call", "POST", checkEndpoint, suite.requestData,
-		tracing.GetHeadersFromContextAsMap(suite.ctx)).Return(suite.httpResponse, nil).Once()
+		tracing.AddHttpHeadersFromContext(http.Header{}, suite.ctx)).Return(suite.httpResponse, nil).Once()
 	suite.apiClientMock.On("GetBody", suite.httpResponse).Return([]byte(checkOk), nil).Once()
 
 	result, err := suite.phalanxClient.CheckName(suite.ctx, suite.requestData.Get(contentKey))
@@ -63,7 +63,7 @@ func (suite *PhalanxTestSuite) TestRetriesFailedTwice() {
 
 func (suite *PhalanxTestSuite) TestRetriesFailed() {
 	suite.apiClientMock.On("Call", "POST", checkEndpoint, suite.requestData,
-		tracing.GetHeadersFromContextAsMap(suite.ctx)).Return(suite.httpResponse, errors.New("error"))
+		tracing.AddHttpHeadersFromContext(http.Header{}, suite.ctx)).Return(suite.httpResponse, errors.New("error"))
 
 	result, err := suite.phalanxClient.CheckName(suite.ctx, suite.requestData.Get(contentKey))
 

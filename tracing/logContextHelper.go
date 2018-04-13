@@ -26,7 +26,7 @@ const (
 	DATA_CENTER = "datacenter"
 
 	X_SJC_SHIELD_STATUS = "sjc_shields_status"
-	
+
 	ContextFieldsKey = "@fields"
 
 	shield_unhealthy_value = "0"
