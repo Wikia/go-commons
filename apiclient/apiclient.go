@@ -50,7 +50,11 @@ func (client *Client) Call(method, endpoint string, data url.Values, headers htt
 	}
 
 	// adding headers
-	request.Header = headers
+	for key, values := range headers {
+		for _, v := range values {
+			request.Header.Set(key, v)
+		}
+	}
 
 	// This seems heavy handed but as a rule we are closing the connection after
 	// GetBody below. This ensures that we are communicating our intentions in
