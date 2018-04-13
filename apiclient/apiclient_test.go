@@ -3,8 +3,10 @@ package apiclient
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/stretchr/testify/assert"
+	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var (
@@ -66,9 +68,9 @@ func TestIfHttpClientsAreDifferent(t *testing.T) {
 func TestCallWithHeaders(t *testing.T) {
 	client, _ := NewClient(HeaderTest)
 
-	headers := map[string]string{
-		"custom-header":  "foo",
-		"Another-Header": "bar",
+	headers := http.Header{
+		"custom-header":  []string{"foo"},
+		"Another-Header": []string{"bar"},
 	}
 
 	response, err := client.Call("GET", "", nil, headers)
@@ -80,8 +82,8 @@ func TestCallWithHeaders(t *testing.T) {
 	assert.NoError(t, err, fmt.Sprintf("Error deserializing JSON: %#v", response.Body))
 
 	data := f.(map[string]interface{})
-	assert.NotNil(t, data["Custom-Header"], "Custom-Header is missing")
-	assert.Equal(t, "foo", data["Custom-Header"].(string), "Custom-Header is invalid")
+	assert.NotNil(t, data["custom-header"], "custom-header is missing")
+	assert.Equal(t, "foo", data["custom-header"].(string), "custom-header is invalid")
 	assert.NotNil(t, data["Another-Header"], "Another-Header is missing")
 	assert.Equal(t, "bar", data["Another-Header"].(string), "Another-Header is invalid")
 }
@@ -98,13 +100,7 @@ func TestCallWithoutHeaders(t *testing.T) {
 	assert.NoError(t, err, fmt.Sprintf("Error deserializing JSON: %#v", response.Body))
 
 	data := f.(map[string]interface{})
-	assert.Equal(t, 4, len(data), "Incorrect number of headers sent")
-
-	for k, v := range data {
-		fmt.Printf("%v: %v\n", k, v.(string))
-	}
-	assert.NotNil(t, data["Content-Type"], "Content-Type is missing")
-	assert.Equal(t, "application/x-www-form-urlencoded", data["Content-Type"].(string), "Content-Type is invalid")
+	assert.Equal(t, 3, len(data), "Incorrect number of headers sent")
 
 	assert.NotNil(t, data["User-Agent"], "User-Agent is missing")
 	assert.Equal(t, "Go-http-client/1.1", data["User-Agent"].(string), "User-Agent is invalid")

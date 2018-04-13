@@ -9,7 +9,7 @@ import (
 )
 
 type ApiClient interface {
-	Call(method, endpoint string, data url.Values, headers map[string]string) (*http.Response, error)
+	Call(method, endpoint string, data url.Values, headers http.Header) (*http.Response, error)
 	NewRequest(method, endpoint string, data url.Values) (*http.Request, error)
 	GetBody(resp *http.Response) ([]byte, error)
 }
@@ -43,16 +43,14 @@ func NewClientWithProxy(baseURL string, proxy string) (*Client, error) {
 	return client, nil
 }
 
-func (client *Client) Call(method, endpoint string, data url.Values, headers map[string]string) (*http.Response, error) {
+func (client *Client) Call(method, endpoint string, data url.Values, headers http.Header) (*http.Response, error) {
 	request, err := client.NewRequest(method, endpoint, data)
 	if err != nil {
 		return nil, err
 	}
 
 	// adding headers
-	for header, value := range headers {
-		request.Header[header] = []string{value}
-	}
+	request.Header = headers
 
 	// This seems heavy handed but as a rule we are closing the connection after
 	// GetBody below. This ensures that we are communicating our intentions in
