@@ -139,10 +139,18 @@ func (client *Client) doRequest(ctx context.Context, endpoint string, data url.V
 	if err != nil {
 		return nil, err
 	}
+	
+	if span != nil {
+		ext.HTTPStatusCode.Set(span, uint16(resp.StatusCode))
+	}
 
 	resBody, err := client.apiClient.GetBody(resp)
 	if err != nil {
 		return nil, err
+	}
+	
+	if span != nil {
+		span.LogKV("response", string(resBody))
 	}
 
 	return resBody, nil
