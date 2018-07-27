@@ -3,7 +3,7 @@ package tracing
 import (
 	"net/http"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 const (
