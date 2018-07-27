@@ -40,7 +40,7 @@ func NewClient(baseURL string) (*Client, error) {
 	client := &Client{httpClient: retryablehttp.NewClient(), BaseURL: parsedURL}
 	client.SetRetryMax(3)
 	client.SetRetryWaitMin(20 * time.Nanosecond)
-	client.SetRetryWaitMin(1 * time.Second)
+	client.SetRetryWaitMax(1 * time.Second)
 
 	return client, nil
 }
