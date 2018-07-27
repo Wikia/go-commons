@@ -1,8 +1,9 @@
 package tracing
 
 import (
+	"context"
+
 	log "github.com/Sirupsen/logrus"
-	"golang.org/x/net/context"
 )
 
 const (

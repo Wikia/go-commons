@@ -82,8 +82,8 @@ func TestCallWithHeaders(t *testing.T) {
 	assert.NoError(t, err, fmt.Sprintf("Error deserializing JSON: %#v", response.Body))
 
 	data := f.(map[string]interface{})
-	assert.NotNil(t, data["custom-header"], "custom-header is missing")
-	assert.Equal(t, "foo", data["custom-header"].(string), "custom-header is invalid")
+	assert.NotNil(t, data["Custom-Header"], "custom-header is missing")
+	assert.Equal(t, "foo", data["Custom-Header"].(string), "custom-header is invalid")
 	assert.NotNil(t, data["Another-Header"], "Another-Header is missing")
 	assert.Equal(t, "bar", data["Another-Header"].(string), "Another-Header is invalid")
 }
@@ -100,7 +100,7 @@ func TestCallWithoutHeaders(t *testing.T) {
 	assert.NoError(t, err, fmt.Sprintf("Error deserializing JSON: %#v", response.Body))
 
 	data := f.(map[string]interface{})
-	assert.Equal(t, 3, len(data), "Incorrect number of headers sent")
+	assert.True(t, len(data) >= 3, "Incorrect number of headers sent")
 
 	assert.NotNil(t, data["User-Agent"], "User-Agent is missing")
 	assert.Equal(t, "Go-http-client/1.1", data["User-Agent"].(string), "User-Agent is invalid")
