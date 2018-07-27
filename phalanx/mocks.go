@@ -48,11 +48,6 @@ func (m *ApiClientMock) Call(method, endpoint string, data url.Values, headers h
 	return args.Get(0).(*http.Response), args.Error(1)
 }
 
-func (m *ApiClientMock) NewRequest(method, endpoint string, data url.Values) (*retryablehttp.Request, error) {
-	args := m.Called(method, endpoint, data)
-	return args.Get(0).(*retryablehttp.Request), args.Error(1)
-}
-
 func (m *ApiClientMock) GetBody(resp *http.Response) ([]byte, error) {
 	args := m.Called(resp)
 	return args.Get(0).([]byte), args.Error(1)

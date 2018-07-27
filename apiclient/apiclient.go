@@ -22,7 +22,6 @@ type ApiClient interface {
 	SetRetryWaitMax(period time.Duration)
 	CallWithContext(ctx context.Context, method, endpoint string, data url.Values, headers http.Header) (*http.Response, error)
 	Call(method, endpoint string, data url.Values, headers http.Header) (*http.Response, error)
-	NewRequest(method, endpoint string, data url.Values) (*retryablehttp.Request, error)
 	GetBody(resp *http.Response) ([]byte, error)
 	GetClient() *retryablehttp.Client
 }
