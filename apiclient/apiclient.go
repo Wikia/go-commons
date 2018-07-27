@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 
 	"github.com/hashicorp/go-retryablehttp"
 	"github.com/opentracing/opentracing-go"
@@ -16,6 +17,9 @@ import (
 
 type ApiClient interface {
 	SetLogger(log *log.Logger)
+	SetRetryMax(count int)
+	SetRetryWaitMin(period time.Duration)
+	SetRetryWaitMax(period time.Duration)
 	CallWithContext(ctx context.Context, method, endpoint string, data url.Values, headers http.Header) (*http.Response, error)
 	Call(method, endpoint string, data url.Values, headers http.Header) (*http.Response, error)
 	NewRequest(method, endpoint string, data url.Values) (*retryablehttp.Request, error)
@@ -33,7 +37,11 @@ func NewClient(baseURL string) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	client := &Client{httpClient: retryablehttp.NewClient(), BaseURL: parsedURL}
+	client.SetRetryMax(3)
+	client.SetRetryWaitMin(20 * time.Nanosecond)
+	client.SetRetryWaitMin(1 * time.Second)
 
 	return client, nil
 }
@@ -58,6 +66,18 @@ func (client *Client) GetClient() *retryablehttp.Client {
 
 func (client *Client) SetLogger(log *log.Logger) {
 	client.httpClient.Logger = log
+}
+
+func (client *Client) SetRetryMax(count int) {
+	client.httpClient.RetryMax = count
+}
+
+func (client *Client) SetRetryWaitMin(period time.Duration) {
+	client.httpClient.RetryWaitMin = period
+}
+
+func (client *Client) SetRetryWaitMax(period time.Duration) {
+	client.httpClient.RetryWaitMax = period
 }
 
 func (client *Client) CallWithContext(ctx context.Context, method, endpoint string, data url.Values, headers http.Header) (*http.Response, error) {

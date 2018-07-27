@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/hashicorp/go-retryablehttp"
 	"github.com/stretchr/testify/mock"
@@ -12,6 +13,18 @@ import (
 
 type ApiClientMock struct {
 	mock.Mock
+}
+
+func (m *ApiClientMock) SetRetryMax(count int) {
+	m.Called(count)
+}
+
+func (m *ApiClientMock) SetRetryWaitMin(period time.Duration) {
+	m.Called(period)
+}
+
+func (m *ApiClientMock) SetRetryWaitMax(period time.Duration) {
+	m.Called(period)
 }
 
 func (m *ApiClientMock) SetLogger(log *log.Logger) {
