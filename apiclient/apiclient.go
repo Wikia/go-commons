@@ -20,6 +20,7 @@ type ApiClient interface {
 	Call(method, endpoint string, data url.Values, headers http.Header) (*http.Response, error)
 	NewRequest(method, endpoint string, data url.Values) (*retryablehttp.Request, error)
 	GetBody(resp *http.Response) ([]byte, error)
+	GetClient() *retryablehttp.Client
 }
 
 type Client struct {
@@ -49,6 +50,10 @@ func NewClientWithProxy(baseURL string, proxy string) (*Client, error) {
 	}
 
 	return client, nil
+}
+
+func (client *Client) GetClient() *retryablehttp.Client {
+	return client.httpClient
 }
 
 func (client *Client) SetLogger(log *log.Logger) {

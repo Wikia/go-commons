@@ -18,6 +18,12 @@ func (m *ApiClientMock) SetLogger(log *log.Logger) {
 	m.Called(log)
 }
 
+func (m *ApiClientMock) GetClient() *retryablehttp.Client {
+	args := m.Called()
+
+	return args.Get(0).(*retryablehttp.Client)
+}
+
 func (m *ApiClientMock) CallWithContext(ctx context.Context, method, endpoint string, data url.Values, headers http.Header) (*http.Response, error) {
 	args := m.Called(ctx, method, endpoint, data, headers)
 
