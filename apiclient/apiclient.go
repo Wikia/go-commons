@@ -41,6 +41,7 @@ func NewClient(baseURL string) (*Client, error) {
 	client.SetRetryMax(3)
 	client.SetRetryWaitMin(20 * time.Nanosecond)
 	client.SetRetryWaitMax(1 * time.Second)
+	client.SetBackoff(retryablehttp.LinearJitterBackoff)
 
 	return client, nil
 }
@@ -57,6 +58,10 @@ func NewClientWithProxy(baseURL string, proxy string) (*Client, error) {
 	}
 
 	return client, nil
+}
+
+func (client *Client) SetBackoff(backoff retryablehttp.Backoff) {
+	client.httpClient.Backoff = backoff
 }
 
 func (client *Client) GetClient() *retryablehttp.Client {
