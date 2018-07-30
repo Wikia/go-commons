@@ -11,7 +11,7 @@ import (
 
 var (
 	BaseURL     = "http://wikia.com"
-	ProxyURL    = "http://dev.icache.service.sjc-dev.consul:80"
+	ProxyURL    = "http://dev.icache.service.sjc.consul:80"
 	Endpoint    = "test"
 	EndpointURL = BaseURL + "/" + Endpoint
 	BadEndpoint = ":"
