@@ -53,9 +53,11 @@ func NewClientWithProxy(baseURL string, proxy string) (*Client, error) {
 	}
 
 	proxyURL, err := url.Parse(proxy)
-	if err == nil {
-		client.httpClient.HTTPClient.Transport = &http.Transport{Proxy: http.ProxyURL(proxyURL)}
+	if err != nil {
+		return nil, err	
 	}
+	
+	client.httpClient.HTTPClient.Transport = &http.Transport{Proxy: http.ProxyURL(proxyURL)}
 
 	return client, nil
 }
