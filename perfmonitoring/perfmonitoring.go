@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/Wikia/go-commons/settings"
-	"github.com/influxdb/influxdb/client"
+	"github.com/influxdata/influxdb/client"
 )
 
 /*Note that this object is designed to be used in a single thread
