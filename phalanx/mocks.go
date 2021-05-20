@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/hashicorp/go-retryablehttp"
 	"github.com/stretchr/testify/mock"
 )
 

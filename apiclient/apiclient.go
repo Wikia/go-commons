@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/hashicorp/go-retryablehttp"
+	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 )
 

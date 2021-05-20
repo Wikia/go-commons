@@ -8,6 +8,7 @@ import (
 
 	"github.com/Wikia/go-commons/apiclient"
 	"github.com/Wikia/go-commons/tracing"
+	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 )
 
