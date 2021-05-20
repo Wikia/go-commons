@@ -3,10 +3,15 @@ module github.com/Wikia/go-commons/phalanx
 go 1.13
 
 require (
-	github.com/Wikia/go-commons/apiclient v0.0.0-20190916181741-af25ab2c061b
-	github.com/Wikia/go-commons/tracing v0.0.0-20190916181741-af25ab2c061b
-	github.com/hashicorp/go-retryablehttp v0.6.2
-	github.com/opentracing/opentracing-go v1.1.0
-	github.com/stretchr/testify v1.4.0
+	github.com/Wikia/go-commons/apiclient v0.0.0-20210520180752-08e570da9269
+	github.com/Wikia/go-commons/tracing v0.0.0-20210520180752-08e570da9269
+	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
+	github.com/hashicorp/go-hclog v0.16.1 // indirect
+	github.com/hashicorp/go-retryablehttp v0.7.0 // indirect
+	github.com/opentracing/opentracing-go v1.2.0
+	github.com/sirupsen/logrus v1.8.1 // indirect
+	github.com/stretchr/testify v1.7.0
 	golang.org/x/net v0.0.0-20190916140828-c8589233b77d // indirect
+	golang.org/x/sys v0.0.0-20210514084401-e8d321eab015 // indirect
+	gopkg.in/yaml.v2 v2.2.2 // indirect
 )

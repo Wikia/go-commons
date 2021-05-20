@@ -10,8 +10,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/hashicorp/go-retryablehttp"
-	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 )
 
@@ -54,9 +52,9 @@ func NewClientWithProxy(baseURL string, proxy string) (*Client, error) {
 
 	proxyURL, err := url.Parse(proxy)
 	if err != nil {
-		return nil, err	
+		return nil, err
 	}
-	
+
 	client.httpClient.HTTPClient.Transport = &http.Transport{Proxy: http.ProxyURL(proxyURL)}
 
 	return client, nil
