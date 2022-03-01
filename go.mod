@@ -28,7 +28,7 @@ require (
 	go.uber.org/zap v1.16.0
 	golang.org/x/net v0.0.0-20210913180222-943fd674d43e
 	gorm.io/driver/mysql v1.1.2
-	gorm.io/gorm v1.21.12
+	gorm.io/gorm v1.23.2
 	gorm.io/plugin/dbresolver v1.1.0
 	moul.io/zapgorm2 v1.1.0
 )
