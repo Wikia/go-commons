@@ -25,7 +25,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
 	github.com/uber/jaeger-lib v2.4.1+incompatible
-	go.uber.org/zap v1.16.0
+	go.uber.org/zap v1.21.0
 	golang.org/x/net v0.0.0-20210913180222-943fd674d43e
 	gorm.io/driver/mysql v1.3.2
 	gorm.io/gorm v1.23.2
