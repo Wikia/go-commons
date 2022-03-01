@@ -6,12 +6,12 @@ updates:
     schedule:
       interval: "weekly"
 
-  # Enable version updates for Docker
-  - package-ecosystem: "docker"
-    # Look for a `Dockerfile` in the `root` directory
-    directory: "/"
-    schedule:
-      interval: "weekly"
+# Enable version updates for Docker
+#  - package-ecosystem: "docker"
+#    # Look for a `Dockerfile` in the `root` directory
+#    directory: "/"
+#    schedule:
+#      interval: "weekly"
 
   # Enable version updates for github-actions
   # - package-ecosystem: "github-actions"
