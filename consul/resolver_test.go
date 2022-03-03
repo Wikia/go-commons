@@ -22,12 +22,16 @@ func (suite *ResolverTestSuite) SetupTest() {
 	suite.resolver = NewResolver(suite.consul)
 
 	suite.response = make([]*api.ServiceEntry, 2)
-	suite.response[0] = &api.ServiceEntry{&api.Node{"foo", "10.10.10.10"},
-		&api.AgentService{"1234", "auth", []string{"production"}, 9500, ""},
-		nil}
-	suite.response[1] = &api.ServiceEntry{&api.Node{"bar", "10.10.10.11"},
-		&api.AgentService{"1234", "auth", []string{"production"}, 9500, ""},
-		nil}
+	suite.response[0] = &api.ServiceEntry{
+		Node:    &api.Node{Node: "foo", Address: "10.10.10.10"},
+		Service: &api.AgentService{ID: "1234", Service: "auth", Tags: []string{"production"}, Port: 9500, Address: ""},
+		Checks:  nil,
+	}
+	suite.response[1] = &api.ServiceEntry{
+		Node:    &api.Node{Node: "bar", Address: "10.10.10.11"},
+		Service: &api.AgentService{ID: "1234", Service: "auth", Tags: []string{"production"}, Port: 9500, Address: ""},
+		Checks:  nil,
+	}
 }
 
 func (suite *ResolverTestSuite) TestResolveAll() {
