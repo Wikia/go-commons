@@ -1,10 +1,11 @@
 package tracing
 
 import (
-	"github.com/stretchr/testify/assert"
-	"golang.org/x/net/context"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"golang.org/x/net/context"
 )
 
 func TestShouldCreateRequestUsingContextDataWhereHeadersAreNotEmpty(t *testing.T) {
@@ -24,7 +25,7 @@ func TestShouldCreateRequestUsingContextDataWhereHeadersAreNotEmpty(t *testing.T
 	assert.Equal(t, expected[XClientIp], newReq.Header.Get(XClientIp), "X Client Ip Header Should Have Different Value")
 	assert.Equal(t, expected[XUserId], newReq.Header.Get(XUserId), "X User Id Header Should Have Different Value")
 	assert.Equal(t, expected[XParentSpanId], newReq.Header.Get(XParentSpanId), "X Parent Span Id Header Should Have Different Value")
-	assert.Equal(t, expected[XSJCShieldsHealthy], newReq.Header.Get(XSJCShieldsHealthy), "X SJC Shields Healthy header should have different value")
+	assert.Equal(t, expected[XSJCShieldsHealthy], newReq.Header[XSJCShieldsHealthy][0], "X SJC Shields Healthy header should have different value")
 }
 
 func TestShouldCreateRequestUsingContextDataWhereHeadersAreEmpty(t *testing.T) {

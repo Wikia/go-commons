@@ -10,6 +10,11 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    services:
+      consul:
+        image: consul
+        env:
+          CONSUL_BIND_INTERFACE: eth0
     steps:
     - uses: actions/checkout@v2
 
@@ -22,4 +27,6 @@ jobs:
       run: go build -v ./...
 
     - name: Test
+      env:
+        WIKIA_ENVIRONMENT: testing
       run: go test -v ./...

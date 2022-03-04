@@ -23,7 +23,7 @@ func GetTestHeadersAsMap() map[string]string {
 func NewTestContext() context.Context {
 	c := context.TODO()
 	for header, value := range GetTestHeadersAsMap() {
-		context.WithValue(c, header, value)
+		c = context.WithValue(c, header, value)
 	}
 	return c
 }
