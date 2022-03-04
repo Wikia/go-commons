@@ -19,9 +19,9 @@ type PerfMonitoring struct {
 }
 
 func NewInfluxdbClient() (*client.Client, error) {
-	settings := settings.GetSettings()
+	conf := settings.GetSettings()
 	influxConfig := new(client.ClientConfig)
-	influxConfig.Host = fmt.Sprintf("%s:%d", settings.InfluxDB.Host, settings.InfluxDB.UdpPort)
+	influxConfig.Host = fmt.Sprintf("%s:%d", conf.InfluxDB.Host, conf.InfluxDB.UdpPort)
 	influxConfig.IsUDP = true
 	influxClient, err := client.NewClient(influxConfig)
 	if err != nil {

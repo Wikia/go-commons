@@ -30,6 +30,9 @@ func init() {
 	} else if env == "staging" {
 		influxDBSettings.Host = "staging.app-metrics-etl.service.sjc.consul"
 		influxDBSettings.UdpPort = 5552
+	} else if env == "testing" {
+		influxDBSettings.Host = "127.0.0.1"
+		influxDBSettings.UdpPort = 8301
 	} else {
 		influxDBSettings.Host = "prod.app-metrics-etl.service.sjc.consul"
 		influxDBSettings.UdpPort = 5551
