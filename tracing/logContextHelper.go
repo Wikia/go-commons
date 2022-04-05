@@ -21,6 +21,7 @@ const (
 	SPAN_ID        = "span_id"
 	PARENT_SPAN_ID = "parent_span_id"
 	TRACE_ID       = "trace_id"
+	USER_AGENT     = "user_agent"
 
 	WIKI_ID     = "wiki_id"
 	ENVIRONMENT = "environment"
