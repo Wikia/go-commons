@@ -16,6 +16,7 @@ func GetTestHeadersAsMap() map[string]string {
 	headers[XSpanId] = "54gyr54g45"
 	headers[XParentSpanId] = "54gyr54g45"
 	headers[XSJCShieldsHealthy] = "0"
+	headers[UserAgent] = "Test-Client-1.0"
 
 	return headers
 }

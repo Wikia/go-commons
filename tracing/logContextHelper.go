@@ -21,6 +21,7 @@ const (
 	SPAN_ID        = "span_id"
 	PARENT_SPAN_ID = "parent_span_id"
 	TRACE_ID       = "trace_id"
+	USER_AGENT     = "user_agent"
 
 	WIKI_ID     = "wiki_id"
 	ENVIRONMENT = "environment"
@@ -34,7 +35,7 @@ const (
 	shield_unhealthy_log   = "unhealthy"
 )
 
-var contextFields = [17]string{
+var contextFields = [18]string{
 	USER_ID,
 	WIKIA_USER_ID,
 	HTTP_METHOD,
@@ -49,6 +50,7 @@ var contextFields = [17]string{
 	SPAN_ID,
 	PARENT_SPAN_ID,
 	TRACE_ID,
+	USER_AGENT,
 
 	WIKI_ID,
 	ENVIRONMENT,

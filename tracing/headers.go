@@ -1,9 +1,8 @@
 package tracing
 
 import (
-	"net/http"
-
 	"context"
+	"net/http"
 )
 
 const (
@@ -17,6 +16,7 @@ const (
 	XWikiaUserId       = "X-Wikia-UserId"
 	XForwardedFor      = "X-Forwarded-For"
 	XSJCShieldsHealthy = "X-SJC-shields-healthy"
+	UserAgent          = "User-Agent"
 )
 
 var ContextHeaderFields = map[string]string{
@@ -29,6 +29,7 @@ var ContextHeaderFields = map[string]string{
 	PARENT_SPAN_ID:      XParentSpanId,
 	TRACE_ID:            XTraceId,
 	X_SJC_SHIELD_STATUS: XSJCShieldsHealthy,
+	USER_AGENT:          UserAgent,
 }
 
 func GetHeadersFromContextAsMap(c context.Context) map[string]string {
