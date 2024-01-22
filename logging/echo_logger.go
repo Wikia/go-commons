@@ -15,7 +15,7 @@ type key int
 
 const loggerIDKey key = 119
 
-//LoggerInContext will embed zap.Logger into request context for handler to use
+// LoggerInContext will embed zap.Logger into request context for handler to use
 func LoggerInContext(logger *zap.Logger) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
@@ -30,14 +30,15 @@ func LoggerInContext(logger *zap.Logger) echo.MiddlewareFunc {
 func EchoLogger(logger *zap.Logger) echo.MiddlewareFunc {
 	return middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
 		LogRequestID: true,
-		LogLatency: true,
-		LogHost: true,
-		LogRemoteIP: true,
-		LogReferer: true,
-		LogURIPath: true,
+		LogLatency:   true,
+		LogHost:      true,
+		LogRemoteIP:  true,
+		LogReferer:   true,
+		LogURIPath:   true,
 		LogUserAgent: true,
-		LogMethod: true,
-		LogStatus: true,
+		LogMethod:    true,
+		LogStatus:    true,
+		LogHeaders:   []string{"X-Wikia-Internal-Request"},
 		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
 			req := c.Request()
 
@@ -48,8 +49,8 @@ func EchoLogger(logger *zap.Logger) echo.MiddlewareFunc {
 					traceID = sc.TraceID().String()
 				}
 			}
-			
-			logger.Info("request",
+
+			wrapped := logger.With(
 				zap.String("request_id", v.RequestID),
 				zap.Duration("latency", v.Latency),
 				zap.String("host", v.Host),
@@ -60,7 +61,11 @@ func EchoLogger(logger *zap.Logger) echo.MiddlewareFunc {
 				zap.String("method", v.Method),
 				zap.Int("status", v.Status),
 				zap.String("trace_id", traceID),
+				zap.Any("headers", v.Headers),
 			)
+
+			wrapped.Info("request")
+			c.SetRequest(req.WithContext(addLoggerToContext(req.Context(), wrapped)))
 			return nil
 		},
 	})
