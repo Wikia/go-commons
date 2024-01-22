@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       consul:
-        image: consul
+        image: consul:1.15.4
         env:
           CONSUL_BIND_INTERFACE: eth0
     steps:
