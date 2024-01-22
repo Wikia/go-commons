@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 	dblogger "gorm.io/gorm/logger"
 	"gorm.io/plugin/dbresolver"
+	"gorm.io/plugin/opentelemetry/tracing"
 	"moul.io/zapgorm2"
 )
 
@@ -48,6 +49,10 @@ func GetConnection(logger *zap.Logger, logLevel dblogger.LogLevel, sources, repl
 
 	if err != nil {
 		return nil, errors.Wrap(err, "could not setup db replicas")
+	}
+
+	if err = db.Use(tracing.NewPlugin()); err != nil {
+		return nil, errors.Wrap(err, "could not setup db tracing and metrics")
 	}
 
 	return db, nil
