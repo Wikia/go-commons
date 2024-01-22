@@ -53,7 +53,8 @@ func EchoLogger(logger *zap.Logger) echo.MiddlewareFunc {
 			c.SetRequest(req.WithContext(addLoggerToContext(req.Context(), wrapped)))
 		},
 		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
-			wrapped := logger.With(
+			log := FromEchoContext(c)
+			wrapped := log.With(
 				zap.String("request_id", v.RequestID),
 				zap.Duration("latency", v.Latency),
 				zap.String("host", v.Host),
