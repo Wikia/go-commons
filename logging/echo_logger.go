@@ -39,10 +39,9 @@ func EchoLogger(logger *zap.Logger) echo.MiddlewareFunc {
 		LogMethod:    true,
 		LogStatus:    true,
 		LogHeaders:   []string{"X-Wikia-Internal-Request"},
-		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
-			req := c.Request()
-
+		BeforeNextFunc: func(c echo.Context) {
 			var traceID string
+			req := c.Request()
 
 			if span := opentracing.SpanFromContext(req.Context()); span != nil {
 				if sc, ok := span.Context().(jaeger.SpanContext); ok {
@@ -50,6 +49,10 @@ func EchoLogger(logger *zap.Logger) echo.MiddlewareFunc {
 				}
 			}
 
+			wrapped := logger.With(zap.String("trace_id", traceID))
+			c.SetRequest(req.WithContext(addLoggerToContext(req.Context(), wrapped)))
+		},
+		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
 			wrapped := logger.With(
 				zap.String("request_id", v.RequestID),
 				zap.Duration("latency", v.Latency),
@@ -60,12 +63,10 @@ func EchoLogger(logger *zap.Logger) echo.MiddlewareFunc {
 				zap.String("user_agent", v.UserAgent),
 				zap.String("method", v.Method),
 				zap.Int("status", v.Status),
-				zap.String("trace_id", traceID),
 				zap.Any("headers", v.Headers),
 			)
 
 			wrapped.Info("request")
-			c.SetRequest(req.WithContext(addLoggerToContext(req.Context(), wrapped)))
 			return nil
 		},
 	})
