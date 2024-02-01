@@ -22,5 +22,5 @@ require (
 	gorm.io/gorm v1.25.5
 	gorm.io/plugin/dbresolver v1.5.0
 	gorm.io/plugin/opentelemetry v0.1.4
-	moul.io/zapgorm2 v1.1.3
+	moul.io/zapgorm2 v1.3.0
 )
