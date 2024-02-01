@@ -38,7 +38,7 @@ func EchoLogger(logger *zap.Logger) echo.MiddlewareFunc {
 		LogUserAgent: true,
 		LogMethod:    true,
 		LogStatus:    true,
-		LogHeaders:   []string{"X-Wikia-Internal-Request"},
+		LogHeaders:   []string{"X-Wikia-Internal-Request","X-Original-Host"},
 		BeforeNextFunc: func(c echo.Context) {
 			var traceID string
 			req := c.Request()
