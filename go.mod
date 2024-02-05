@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
 	github.com/go-playground/validator/v10 v10.17.0
-	github.com/hashicorp/consul/api v1.15.3
+	github.com/hashicorp/consul/api v1.27.0
 	github.com/hashicorp/go-retryablehttp v0.7.5
 	github.com/influxdata/influxdb v0.8.8
 	github.com/labstack/echo/v4 v4.11.4
